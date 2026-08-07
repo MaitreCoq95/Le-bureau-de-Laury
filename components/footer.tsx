@@ -1,8 +1,7 @@
 'use client'
 
-import { Linkedin, Mail, Phone } from "lucide-react"
+import { Mail, Phone } from "lucide-react"
 import { useTranslation } from "@/lib/i18n/useTranslation"
-import Image from "next/image"
 
 export function Footer() {
   const { t } = useTranslation()
@@ -13,14 +12,9 @@ export function Footer() {
         <div className="grid md:grid-cols-3 gap-8">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <Image
-                src="/LOGO VYXO CONSULTING.png"
-                alt="Vyxo Consulting"
-                width={100}
-                height={33}
-                className="h-8 w-auto"
-              />
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-lg font-bold text-primary tracking-wide">Le Bureau de</span>
+              <span className="text-lg text-accent italic" style={{ fontFamily: 'Georgia, serif' }}>Laury</span>
             </div>
             <p className="text-muted-foreground text-sm">
               {t.footer.tagline}
@@ -50,22 +44,11 @@ export function Footer() {
                 <Mail className="w-4 h-4" />
                 {t.footer.contact.email}
               </a>
-              <a
-                href={`tel:${t.footer.contact.phone}`}
-                className="flex items-center gap-2 text-muted-foreground hover:text-primary text-sm"
-              >
+              <p className="flex items-center gap-2 text-muted-foreground text-sm">
                 <Phone className="w-4 h-4" />
                 {t.footer.contact.phone}
-              </a>
-              <a
-                href="https://www.linkedin.com/in/nicolas-lemoine-32083417/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-muted-foreground hover:text-primary text-sm"
-              >
-                <Linkedin className="w-4 h-4" />
-                {t.footer.contact.linkedin}
-              </a>
+              </p>
+              <p className="text-xs text-muted-foreground">Toulouse, France</p>
             </div>
           </div>
         </div>

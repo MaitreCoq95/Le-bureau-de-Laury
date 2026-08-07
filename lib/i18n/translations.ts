@@ -1,4 +1,4 @@
-// Translation system for bilingual FR/EN portfolio
+// Translation system for bilingual FR/EN portfolio — Le Bureau de Laury
 export type Language = 'fr' | 'en'
 
 export interface Translations {
@@ -30,8 +30,8 @@ export interface Translations {
     }
     stats: {
       experience: string
-      countries: string
-      projects: string
+      companies: string
+      sectors: string
     }
   }
   services: {
@@ -66,6 +66,15 @@ export interface Translations {
       tagline: string
     }
   }
+  transport: {
+    badge: string
+    title: string
+    subtitle: string
+    cards: Array<{
+      title: string
+      description: string
+    }>
+  }
   timeline: {
     title: string
     subtitle: string
@@ -75,25 +84,6 @@ export interface Translations {
       location: string
       description: string
       achievements: string[]
-    }>
-  }
-  beforeAfter: {
-    title: string
-    subtitle: string
-    before: string
-    after: string
-    comparisons: Array<{
-      before: string
-      after: string
-    }>
-  }
-  roi: {
-    title: string
-    subtitle: string
-    metrics: Array<{
-      value: string
-      label: string
-      description: string
     }>
   }
   whyMe: {
@@ -119,26 +109,6 @@ export interface Translations {
     categories: Array<{
       title: string
       skills: string[]
-    }>
-  }
-  diplomas: {
-    title: string
-    subtitle: string
-    items: Array<{
-      title: string
-      institution: string
-      year: string
-      description: string
-    }>
-  }
-  testimonials: {
-    title: string
-    subtitle: string
-    items: Array<{
-      name: string
-      role: string
-      company: string
-      text: string
     }>
   }
   cta: {
@@ -179,7 +149,7 @@ export const translations: Record<Language, Translations> = {
       nav: {
         services: 'Services',
         premiumServices: 'Offres Premium',
-        experience: 'Expérience',
+        experience: 'Parcours',
         method: 'Méthode',
         skills: 'Compétences',
         contact: 'Contact',
@@ -188,342 +158,315 @@ export const translations: Record<Language, Translations> = {
     },
     hero: {
       greeting: 'Bonjour, je suis',
-      name: 'Nicolas Lemoine',
-      title: 'Chief Performance & Finance Strategist',
-      subtitle: 'Expert Finance • Data • IA • Excellence Opérationnelle',
-      bio: '10+ ans d\'expérience en pilotage financier multi-pays (France, Belgique, Allemagne). Spécialiste en contrôle de gestion, budgeting, forecasting, cost control et automatisation Power BI. Je transforme vos données financières en leviers de performance mesurable.',
+      name: 'Laury Martin',
+      title: 'Relation Client & Développement Commercial',
+      subtitle: 'Partenaire administrative & commerciale des pros',
+      bio: '17 ans d\'expérience en relation client, gestion administrative et développement commercial. Spécialiste de la fidélisation, de la prospection terrain et du suivi opérationnel. J\'accompagne les artisans, TPE et entrepreneurs pour qu\'ils se concentrent sur leur cœur de métier.',
       badges: {
-        experience: '10+ ans d\'expérience',
-        countries: 'Multi-pays (FR/BE/DE)',
-        tools: 'Power BI • SAP • Excel avancé',
+        experience: '17 ans d\'expérience',
+        countries: 'Basée à Toulouse',
+        tools: 'CRM • Prospection • Fidélisation',
       },
       cta: {
-        primary: 'Discutons de votre projet',
-        secondary: 'Voir mon parcours',
+        primary: 'Réserver un appel découverte',
+        secondary: 'Découvrir mes services',
       },
       stats: {
         experience: 'Années d\'expérience',
-        countries: 'Pays',
-        projects: 'Projets réalisés',
+        companies: 'Entreprises',
+        sectors: 'Secteurs couverts',
       },
     },
     services: {
-      title: 'Services',
-      subtitle: 'Expertise Finance, Data & Opérations',
+      title: 'Compétences Clés',
+      subtitle: 'Relation client, gestion administrative et développement commercial',
       intro: {
-        title: 'Un accompagnement sur-mesure pour transformer votre performance',
-        description: 'Je combine finance, data, IA et excellence opérationnelle pour créer de la valeur mesurable dans votre organisation.',
+        title: 'Un accompagnement complet pour libérer votre temps',
+        description: 'Je combine relation client, gestion administrative, IA et rigueur opérationnelle pour créer de la valeur concrète dans votre entreprise.',
       },
       list: [
         {
-          title: 'Pilotage de la Performance Financière',
-          description: 'Mise en place de systèmes de pilotage, KPIs, dashboards stratégiques, suivi de la performance multi-pays',
-          deliverables: 'Dashboards Power BI, Reporting mensuel, KPIs personnalisés',
-          metrics: 'ROI mesurable, Temps de reporting -50%',
+          title: 'Relation client & fidélisation',
+          description: 'Accueil, suivi, satisfaction et fidélisation clientèle variée (particuliers, professionnels, collectivités)',
+          deliverables: 'Accueil téléphonique, suivi satisfaction, programme fidélisation',
+          metrics: 'Taux fidélisation +40%, Satisfaction client +35%',
         },
         {
-          title: 'Budgeting & Forecasting',
-          description: 'Construction de budgets structurés, forecast rolling, modèles prédictifs, simulations de scénarios',
-          deliverables: 'Budget annuel, Forecast 12 mois glissant, Modèles Excel/Power BI',
-          metrics: 'Précision forecast +30%, Réactivité décisionnelle',
+          title: 'Gestion administrative & CRM',
+          description: 'Tenue fichiers clients, mise à jour CRM, organisation documentaire, suivi de dossiers',
+          deliverables: 'CRM structuré, Classement 5S documentaire, Suivi dossiers',
+          metrics: 'Temps admin -60%, Zéro dossier perdu',
         },
         {
-          title: 'Cost Control & Optimisation',
-          description: 'Analyse des coûts, identification des gaspillages, réduction du coût de non-qualité, plans d\'action ROI',
-          deliverables: 'Cartographie des coûts, Plans d\'économies, Suivi ROI',
-          metrics: 'Économies identifiées, ROI tracé',
+          title: 'Devis, facturation & relances',
+          description: 'Établissement devis/factures, relances paiement, suivi règlements',
+          deliverables: 'Devis J+0, Factures automatisées, Relances 1/2/3',
+          metrics: 'Délai paiement -45%, CA récupéré +25%',
         },
         {
-          title: 'Automatisation & IA Finance',
-          description: 'Automatisation du reporting, chatbots IA internes, détection d\'anomalies, génération d\'analyses',
-          deliverables: 'Reporting automatisé, Assistants IA, Alertes intelligentes',
-          metrics: 'Temps manuel -90%, Fiabilité +100%',
+          title: 'Litiges & SAV',
+          description: 'Prise en charge réclamations, résolution litiges, gestion urgences client',
+          deliverables: 'Process résolution, Suivi réclamations, Reporting SAV',
+          metrics: 'Résolution <24h, Fidélisation post-litige +60%',
         },
         {
-          title: 'Data Quality & Gouvernance',
-          description: 'Audit de la qualité des données, standardisation, correction des incohérences, certification KPIs',
-          deliverables: 'Diagnostic qualité, Plan de correction, Documentation',
-          metrics: 'Erreurs -80%, Confiance données +100%',
+          title: 'Planning & coordination',
+          description: 'Gestion agenda, prise de RDV, coordination plannings d\'intervention',
+          deliverables: 'Agenda optimisé, Rappels automatiques, Coordination terrain',
+          metrics: 'Zéro RDV manqué, Taux occupation +30%',
         },
         {
-          title: 'Excellence Opérationnelle Finance',
-          description: 'Optimisation des processus finance, standardisation, formation équipes, amélioration continue',
-          deliverables: 'Processus optimisés, Formations, Documentation',
-          metrics: 'Efficacité +40%, Satisfaction équipes',
+          title: 'Prospection & vente directe',
+          description: 'Développement portefeuille client, prospection terrain et téléphonique, qualification leads',
+          deliverables: 'Fichier prospects qualifiés, Scripts d\'appel, Reporting prospection',
+          metrics: 'Pipeline +50%, Taux conversion +20%',
         },
       ],
     },
     premiumServices: {
       badge: 'Offres Premium',
-      title: 'Finance Augmentée & IA',
-      subtitle: 'Des solutions innovantes combinant finance, data, IA et excellence opérationnelle pour transformer votre organisation',
+      title: 'L\'humain d\'abord, l\'IA en renfort',
+      subtitle: 'Des packs structurés qui combinent expertise terrain, process éprouvés et intelligence artificielle pour des résultats mesurables',
       services: [
         {
-          title: 'Reporting Financier Automatisé & IA',
-          description: 'Construction d\'assistants IA internes, automatisation complète du reporting mensuel, détection autonome des écarts et génération automatique d\'analyses financières exploitables.',
+          title: 'Bureau Zéro Chaos',
+          description: 'Le pack démarrage pour les entrepreneurs qui partent de zéro ou qui croulent sous la paperasse. Diagnostic admin complet, mise en place CRM, création des process devis/factures/relances, organisation documentaire 5S.',
           keyPoints: [
-            'Chatbot IA interne entraîné sur les données du client',
-            'Reporting mensuel produit automatiquement',
-            'Détection automatique des anomalies & variances',
-            'Réduction du travail manuel (20h → 20 min)',
-            'Sécurisation & fiabilisation de la donnée financière',
+            'Diagnostic express de votre maturité administrative',
+            'Mise en place CRM adapté à votre activité',
+            'Process standardisés devis → facture → relance',
+            'Organisation 5S de vos documents et dossiers',
+            'Formation pour garder le système en autonomie',
           ],
-          badge: 'Offre exclusive Vyxo — aucune concurrence équivalente sur le marché.',
+          badge: 'Idéal pour les créateurs et les artisans débordés.',
         },
         {
-          title: 'Modélisation Financière Prédictive',
-          description: 'Création de modèles prédictifs pour anticiper la marge, le cash burn, les risques, la rentabilité par produit ou l\'impact d\'une décision stratégique.',
-          techStack: ['R Studio', 'Python', 'Excel avancé (Power Pivot)', 'Power BI', 'Modèles IA prédictifs'],
-          deliverables: [
-            'Forecast intelligent à 3/6/12 mois',
-            'Simulation d\'impact décisionnel',
-            'Modèles financiers dynamiques',
+          title: 'Machine Commerciale',
+          description: 'Le pack croissance pour ceux qui veulent scaler. CRM intelligent avec scoring leads par IA, relances automatisées et personnalisées, prospection ciblée, reporting mensuel auto-généré.',
+          keyPoints: [
+            'CRM enrichi par IA : scoring leads chaud/tiède/froid',
+            'Relances intelligentes : l\'IA prépare, Laury personnalise',
+            'Prospection ciblée : fichier qualifié + scripts',
+            'Reporting mensuel auto-généré + analyse terrain',
+            'Dashboard TPE : devis, conversions, CA, impayés',
           ],
-          badge: 'Produit premium très recherché par les directions financières.',
+          badge: 'Pour les pros qui veulent faire rentrer du chiffre, pas juste classer des papiers.',
         },
         {
-          title: 'Vyxo Data Quality Scan™',
-          description: 'Audit haut-niveau de la qualité de la donnée financière : identification des erreurs, doublons, incohérences Excel, ruptures de flux, anomalies de variances et KPIs de mauvaise qualité.',
-          diagnosticContent: [
-            'Audit des fichiers Excel / systèmes / reporting',
-            'Analyse des sources d\'erreurs',
-            'Cartographie des incohérences de données',
-            'Scoring qualitatif de la donnée',
-            'Plan de correction & standardisation',
+          title: 'Bureau Externalisé Complet',
+          description: 'Le pack sérénité : admin + commercial + relation client + dashboard + IA. Le patron ne touche plus à rien sauf son métier. Un vrai bureau externalisé clé en main.',
+          keyPoints: [
+            'Gestion administrative complète externalisée',
+            'Suivi commercial de A à Z avec IA',
+            'Relation client : accueil, SAV, fidélisation',
+            'Dashboard de pilotage co-conçu avec nos experts data',
+            'Accueil hybride : chatbot IA + rappel humain garanti',
           ],
-          badge: 'Un service unique sur le marché, combinant finance, data et excellence opérationnelle.',
+          badge: 'Le partenariat long terme pour ne plus jamais penser à l\'administratif.',
         },
       ],
       differentiation: {
-        text: 'Nicolas combine finance, data, IA et excellence opérationnelle pour transformer les organisations.',
-        tagline: 'Un profil rare et puissant.',
+        text: 'Laury combine 17 ans de terrain, rigueur opérationnelle et outils IA pour une prestation que personne d\'autre ne propose dans l\'assistanat freelance.',
+        tagline: 'L\'IA fait le travail répétitif. Laury fait le travail relationnel.',
       },
     },
+    transport: {
+      badge: 'Expertise Sectorielle',
+      title: 'Expérience Transport & Logistique',
+      subtitle: 'Une connaissance concrète du monde des transporteurs routiers',
+      cards: [
+        {
+          title: 'Sourcing & mise en concurrence',
+          description: 'Consultation d\'une dizaine de transporteurs par demande de fret, comparaison des offres',
+        },
+        {
+          title: 'Évaluation & notation',
+          description: 'Co-conception d\'un tableau de suivi et système de notation (délai de réponse, sérieux, flexibilité, respect horaires, qualité échanges)',
+        },
+        {
+          title: 'Gestion messagerie transporteurs',
+          description: 'Interface quotidienne entre équipes internes et panel transporteurs',
+        },
+        {
+          title: 'Benchmark tarifaire',
+          description: 'Tableaux comparatifs des tarifs par secteur géographique et tranche de poids',
+        },
+        {
+          title: 'Développement panel',
+          description: 'RDV avec nouveaux transporteurs pour intégrer les plus pertinents',
+        },
+      ],
+    },
     timeline: {
-      title: 'Expérience Professionnelle',
-      subtitle: '10+ ans d\'expertise en finance et performance',
+      title: 'Mon Parcours',
+      subtitle: '17 ans d\'expérience en relation client et développement commercial',
       jobs: [
         {
-          title: 'Consultant Finance & Performance',
-          company: 'Vyxo Consulting',
-          location: 'France',
-          description: 'Conseil en pilotage financier, data et excellence opérationnelle pour PME et ETI',
+          title: 'Chargée de clientèle',
+          company: 'Selfcity',
+          location: 'Toulouse',
+          description: 'Relation client particuliers/professionnels, fidélisation, gestion fournisseurs, litiges et SAV',
           achievements: [
-            'Accompagnement de 15+ clients en transformation finance',
-            'Automatisation de reporting financier (gain 90% de temps)',
-            'Mise en place de systèmes de pilotage multi-pays',
+            'Gestion portefeuille clients B2C et B2B',
+            'Fidélisation et suivi satisfaction',
+            'Résolution litiges et réclamations SAV',
           ],
         },
         {
-          title: 'Contrôleur de Gestion Groupe',
-          company: 'Groupe International',
-          location: 'France / Belgique / Allemagne',
-          description: 'Pilotage financier multi-pays, budgeting, forecasting et cost control',
+          title: 'Assistante commerciale',
+          company: 'Soval SA',
+          location: 'Toulouse',
+          description: 'Relation clients B2B (bâtiment/collectivités), commandes, facturation, relances, gestion transporteurs',
           achievements: [
-            'Gestion budget annuel 50M€',
-            'Forecast rolling mensuel 3 pays',
-            'Réduction coûts opérationnels -15%',
+            'Gestion relation clients B2B bâtiment & collectivités',
+            'Facturation, relances et suivi règlements',
+            'Sourcing et évaluation panel transporteurs',
           ],
         },
         {
-          title: 'Analyste Financier Senior',
-          company: 'Cabinet de Conseil',
-          location: 'Paris',
-          description: 'Analyse financière, modélisation, due diligence et business plans',
+          title: 'Conseillère commerciale',
+          company: 'Proxigaz (Butagaz)',
+          location: 'Toulouse',
+          description: 'Service résiliation, réclamations, CRM, devis, fidélisation et vente directe',
           achievements: [
-            'Modélisation financière 20+ projets',
-            'Due diligence acquisitions',
-            'Business plans stratégiques',
+            'Fidélisation clients et réduction du churn',
+            'Gestion CRM et suivi pipeline',
+            'Vente directe et upselling',
           ],
         },
-      ],
-    },
-    beforeAfter: {
-      title: 'Avant / Après mon intervention',
-      subtitle: 'Transformation concrète de votre performance financière et opérationnelle',
-      before: 'Avant',
-      after: 'Après',
-      comparisons: [
         {
-          before: 'Marges floues, coûts non maîtrisés',
-          after: 'Drivers de marge identifiés et pilotés',
+          title: 'Appui administratif',
+          company: 'GRDF Occitanie',
+          location: 'Toulouse',
+          description: 'Planification tournées, gestion appels entrants/sortants',
+          achievements: [
+            'Coordination planning tournées techniciens',
+            'Gestion flux appels entrants/sortants',
+            'Organisation logistique terrain',
+          ],
         },
         {
-          before: 'Reporting mensuel en 20h, erreurs fréquentes',
-          after: 'Reporting automatisé en 20 min, fiable',
+          title: 'Conseillère clientèle',
+          company: 'Engie Home Services',
+          location: 'Toulouse',
+          description: 'Prise de rendez-vous, création dossiers clients',
+          achievements: [
+            'Accueil et qualification demandes',
+            'Création et suivi dossiers clients',
+            'Prise de RDV et coordination',
+          ],
         },
         {
-          before: 'Pas de forecast, pilotage à vue',
-          after: 'Budget structuré + forecast rolling fiable',
+          title: 'Conseillère commerciale',
+          company: 'Solocal',
+          location: 'Toulouse',
+          description: 'Prospection terrain et téléphonique, vente directe',
+          achievements: [
+            'Prospection terrain et téléphonique',
+            'Vente directe de solutions digitales',
+            'Développement portefeuille client',
+          ],
         },
         {
-          before: 'Données Excel incohérentes, doublons',
-          after: 'Data quality sous contrôle, KPIs certifiés',
+          title: 'Responsable adjointe',
+          company: 'Jeff de Bruges',
+          location: 'Toulouse',
+          description: 'Commerce, management d\'équipe, fidélisation clients, gestion litiges',
+          achievements: [
+            'Management d\'équipe commerciale',
+            'Fidélisation et programme clients',
+            'Gestion litiges et satisfaction',
+          ],
         },
         {
-          before: 'Coûts cachés, gaspillages invisibles',
-          after: 'Coût de non-qualité mesuré + ROI tracé',
-        },
-      ],
-    },
-    roi: {
-      title: 'Impact Mesurable',
-      subtitle: 'Des résultats concrets et quantifiables',
-      metrics: [
-        {
-          value: '-90%',
-          label: 'Temps de reporting',
-          description: 'Automatisation complète du reporting mensuel',
-        },
-        {
-          value: '+30%',
-          label: 'Précision forecast',
-          description: 'Modèles prédictifs et simulations',
-        },
-        {
-          value: '-15%',
-          label: 'Coûts opérationnels',
-          description: 'Optimisation et élimination des gaspillages',
-        },
-        {
-          value: '100%',
-          label: 'Fiabilité données',
-          description: 'Data quality et gouvernance',
+          title: 'Responsable équipe de caisse',
+          company: 'Total',
+          location: 'Toulouse',
+          description: 'Relation clientèle, gestion des stocks, management équipe',
+          achievements: [
+            'Management équipe de caisse',
+            'Relation clientèle directe',
+            'Gestion stocks et approvisionnement',
+          ],
         },
       ],
     },
     whyMe: {
       title: 'Pourquoi me choisir ?',
-      subtitle: 'Un profil unique alliant finance, data et excellence opérationnelle',
+      subtitle: 'Pas une assistante virtuelle. Une partenaire terrain.',
       reasons: [
         {
-          title: 'Expertise Finance Multi-Pays',
-          description: '10+ ans d\'expérience en pilotage financier France, Belgique, Allemagne',
+          title: 'Terrain avant tout',
+          description: '17 ans de pratique directe face-à-face clients exigeants. Butagaz, GRDF, Engie, Soval. Mon expérience n\'est pas théorique — elle est construite appel après appel.',
         },
         {
-          title: 'Maîtrise Data & IA',
-          description: 'Power BI, Python, R, Excel avancé, automatisation et IA',
+          title: 'Double casquette commerciale & admin',
+          description: 'Prospection + suivi admin complet (devis, factures, relances, CRM). Je ne classe pas des papiers, je fais rentrer du chiffre.',
         },
         {
-          title: 'Excellence Opérationnelle',
-          description: 'Optimisation des processus, qualité, amélioration continue',
+          title: 'Connaissance du transport',
+          description: 'Sélection, évaluation et gestion de transporteurs routiers. Je parle le même langage que les pros du terrain et de la route.',
         },
         {
-          title: 'Résultats Mesurables',
-          description: 'ROI tracé, KPIs certifiés, impact quantifiable',
+          title: 'Résolution sous pression',
+          description: 'Litiges, SAV, urgences, transformation problème en fidélisation. 17 ans à désamorcer les tensions et à transformer un problème en opportunité.',
         },
       ],
     },
     method: {
       badge: 'Ma Méthode',
-      title: 'Méthode Vyxo — 5 étapes',
-      subtitle: 'Une approche structurée et éprouvée pour transformer votre performance financière, votre qualité et vos opérations',
+      title: 'On démarre en trois étapes',
+      subtitle: 'Simple, concret et sans engagement. Vous savez exactement ce que vous obtenez.',
       steps: [
         {
-          title: 'Diagnostic financier & qualité opérationnelle',
-          description: 'Analyse précise des marges, coûts, variances, fiabilité des données et maturité process.',
+          title: 'On échange',
+          description: 'Un appel de 20 minutes pour comprendre votre activité, identifier ce qui vous prend le plus de temps et définir ce que je peux prendre en charge immédiatement.',
         },
         {
-          title: 'Cartographie des flux, des données & des risques',
-          description: 'Identification des ruptures process, incohérences de données, risques opérationnels et sources de variabilité.',
+          title: 'Je vous propose une formule',
+          description: 'Un forfait mensuel adapté à votre volume réel. Pas de package surdimensionné, pas de surprise en fin de mois. Vous savez exactement ce que ça coûte.',
         },
         {
-          title: 'Standardisation & Excellence Opérationnelle',
-          description: 'Création de processus, modèles financiers et règles de gestion homogènes pour une performance stable.',
-        },
-        {
-          title: 'KPI, Automatisation & Systèmes de pilotage',
-          description: 'Construction de dashboards Power BI / Excel avancé et automatisation du reporting qualité + finances.',
-        },
-        {
-          title: 'Pilotage, Excellence & ROI',
-          description: 'Accompagnement DG/Comex, optimisation coûts et réduction du coût de non qualité avec gains mesurables.',
+          title: 'Je prends la main',
+          description: 'Vous vous concentrez sur votre métier. Je gère l\'administratif, le commercial et la relation client. Vous récupérez du temps, de la trésorerie et des clients.',
         },
       ],
     },
     skills: {
       title: 'Compétences & Outils',
-      subtitle: 'Stack technique et expertise',
+      subtitle: 'Expertise terrain augmentée par l\'IA',
       categories: [
         {
-          title: 'Finance & Gestion',
-          skills: ['Contrôle de Gestion', 'Budgeting & Forecasting', 'Cost Control', 'Analyse Financière', 'Business Planning'],
+          title: 'Relation Client',
+          skills: ['Accueil téléphonique', 'Fidélisation', 'SAV & Litiges', 'Satisfaction client', 'Gestion réclamations'],
         },
         {
-          title: 'Data & BI',
-          skills: ['Power BI', 'Excel Avancé', 'Power Query', 'DAX', 'SQL'],
+          title: 'Commercial',
+          skills: ['Prospection terrain', 'Prospection téléphonique', 'Vente directe', 'Qualification leads', 'Négociation'],
         },
         {
-          title: 'IA & Automatisation',
-          skills: ['Python', 'R Studio', 'Modèles Prédictifs', 'Chatbots IA', 'Automatisation'],
+          title: 'Administration',
+          skills: ['Devis & Facturation', 'CRM', 'Organisation 5S', 'Classement', 'Suivi dossiers'],
         },
         {
-          title: 'ERP & Systèmes',
-          skills: ['SAP', 'Oracle', 'NetSuite', 'Sage', 'Cegid'],
-        },
-      ],
-    },
-    diplomas: {
-      title: 'Formation & Certifications',
-      subtitle: 'Parcours académique et professionnel',
-      items: [
-        {
-          title: 'Master II Finance d\'Entreprise',
-          institution: 'École de Commerce',
-          year: '2013',
-          description: 'Spécialisation Finance, Contrôle de Gestion, Audit',
-        },
-        {
-          title: 'Certifications Data & BI',
-          institution: 'Autodidacte',
-          year: '2018-2024',
-          description: 'Power BI, Python, R, Excel avancé, IA',
-        },
-        {
-          title: 'Certification Contrôle de Gestion',
-          institution: 'DFCG',
-          year: '2015',
-          description: 'Diplôme de la Fédération des Contrôleurs de Gestion',
-        },
-      ],
-    },
-    testimonials: {
-      title: 'Témoignages',
-      subtitle: 'Ce que disent mes clients',
-      items: [
-        {
-          name: 'Marie Dubois',
-          role: 'Directrice Financière',
-          company: 'Groupe Industrial',
-          text: 'Nicolas a transformé notre reporting financier. Nous avons gagné 90% de temps et la fiabilité est parfaite.',
-        },
-        {
-          name: 'Jean Martin',
-          role: 'CEO',
-          company: 'Tech Startup',
-          text: 'Un vrai expert qui combine finance et data. Ses modèles prédictifs nous ont permis d\'anticiper nos besoins de trésorerie.',
-        },
-        {
-          name: 'Sophie Laurent',
-          role: 'Contrôleur de Gestion',
-          company: 'PME Export',
-          text: 'Accompagnement de qualité, résultats mesurables. Nicolas a structuré notre pilotage multi-pays.',
+          title: 'IA & Outils',
+          skills: ['Relances IA', 'Scoring leads', 'Reporting auto', 'Chatbot accueil', 'Dashboard TPE'],
         },
       ],
     },
     cta: {
-      title: 'Prêt à transformer votre performance financière ?',
-      subtitle: 'Discutons de votre projet et de vos objectifs',
-      button: 'Prendre rendez-vous',
+      title: 'Parlons de votre projet',
+      subtitle: 'Développement commercial, gestion de la relation client, onboarding — discutons de comment je peux contribuer à votre croissance.',
+      button: 'Réserver mon appel découverte',
     },
     footer: {
-      tagline: 'Expert Finance • Data • IA • Excellence Opérationnelle',
+      tagline: 'Partenaire administrative & commerciale des artisans, TPE et entrepreneurs',
       navigation: {
         title: 'Navigation',
         links: [
           { label: 'Services', href: '#services' },
           { label: 'Offres Premium', href: '#premium-services' },
-          { label: 'Expérience', href: '#experience' },
+          { label: 'Parcours', href: '#timeline' },
           { label: 'Méthode', href: '#method' },
           { label: 'Compétences', href: '#skills' },
           { label: 'Contact', href: '#contact' },
@@ -532,18 +475,18 @@ export const translations: Record<Language, Translations> = {
       services: {
         title: 'Services',
         links: [
-          { label: 'Pilotage Financier', href: '#services' },
-          { label: 'Budgeting & Forecasting', href: '#services' },
-          { label: 'Cost Control', href: '#services' },
-          { label: 'Automatisation & IA', href: '#services' },
-          { label: 'Data Quality', href: '#services' },
-          { label: 'Excellence Opérationnelle', href: '#services' },
+          { label: 'Relation client', href: '#services' },
+          { label: 'Gestion administrative', href: '#services' },
+          { label: 'Suivi commercial', href: '#services' },
+          { label: 'Prospection', href: '#services' },
+          { label: 'Transport & Logistique', href: '#transport' },
+          { label: 'Offres Premium IA', href: '#premium-services' },
         ],
       },
       contact: {
         title: 'Contact',
-        email: 'nicolas.lemoine@vyxoconsult.com',
-        phone: '06.00.00.00.00',
+        email: 'contact@lebureaudelaury.fr',
+        phone: 'À renseigner',
         linkedin: 'LinkedIn',
       },
       legal: {
@@ -554,10 +497,10 @@ export const translations: Record<Language, Translations> = {
           { label: 'CGV', href: '/terms' },
         ],
       },
-      copyright: '© 2024 Nicolas Lemoine - Vyxo Consulting. Tous droits réservés.',
+      copyright: '© 2026 Le Bureau de Laury. Tous droits réservés.',
     },
     floatingCta: {
-      text: 'Discutons de votre projet',
+      text: 'Réserver un appel découverte',
     },
   },
   en: {
@@ -565,7 +508,7 @@ export const translations: Record<Language, Translations> = {
       nav: {
         services: 'Services',
         premiumServices: 'Premium Offers',
-        experience: 'Experience',
+        experience: 'Background',
         method: 'Method',
         skills: 'Skills',
         contact: 'Contact',
@@ -574,342 +517,315 @@ export const translations: Record<Language, Translations> = {
     },
     hero: {
       greeting: 'Hello, I\'m',
-      name: 'Nicolas Lemoine',
-      title: 'Chief Performance & Finance Strategist',
-      subtitle: 'Finance Expert • Data • AI • Operational Excellence',
-      bio: '10+ years of experience in multi-country financial management (France, Belgium, Germany). Specialist in management control, budgeting, forecasting, cost control and Power BI automation. I transform your financial data into measurable performance levers.',
+      name: 'Laury Martin',
+      title: 'Client Relations & Business Development',
+      subtitle: 'Administrative & commercial partner for professionals',
+      bio: '17 years of experience in client relations, administrative management and business development. Specialist in customer retention, field prospecting and operational follow-up. I support craftsmen, small businesses and entrepreneurs so they can focus on their core business.',
       badges: {
-        experience: '10+ years of experience',
-        countries: 'Multi-country (FR/BE/DE)',
-        tools: 'Power BI • SAP • Advanced Excel',
+        experience: '17 years of experience',
+        countries: 'Based in Toulouse',
+        tools: 'CRM • Prospecting • Retention',
       },
       cta: {
-        primary: 'Let\'s discuss your project',
-        secondary: 'View my background',
+        primary: 'Book a discovery call',
+        secondary: 'Discover my services',
       },
       stats: {
         experience: 'Years of experience',
-        countries: 'Countries',
-        projects: 'Completed projects',
+        companies: 'Companies',
+        sectors: 'Sectors covered',
       },
     },
     services: {
-      title: 'Services',
-      subtitle: 'Finance, Data & Operations Expertise',
+      title: 'Key Skills',
+      subtitle: 'Client relations, administrative management and business development',
       intro: {
-        title: 'Tailored support to transform your performance',
-        description: 'I combine finance, data, AI and operational excellence to create measurable value in your organization.',
+        title: 'Complete support to free up your time',
+        description: 'I combine client relations, administrative management, AI and operational rigor to create concrete value in your business.',
       },
       list: [
         {
-          title: 'Financial Performance Management',
-          description: 'Implementation of management systems, KPIs, strategic dashboards, multi-country performance tracking',
-          deliverables: 'Power BI Dashboards, Monthly Reporting, Custom KPIs',
-          metrics: 'Measurable ROI, Reporting Time -50%',
+          title: 'Client relations & retention',
+          description: 'Welcome, follow-up, satisfaction and retention of diverse clientele (individuals, professionals, public sector)',
+          deliverables: 'Phone reception, Satisfaction tracking, Retention program',
+          metrics: 'Retention rate +40%, Client satisfaction +35%',
         },
         {
-          title: 'Budgeting & Forecasting',
-          description: 'Building structured budgets, rolling forecasts, predictive models, scenario simulations',
-          deliverables: 'Annual Budget, 12-month Rolling Forecast, Excel/Power BI Models',
-          metrics: 'Forecast Accuracy +30%, Decision Reactivity',
+          title: 'Administrative management & CRM',
+          description: 'Client file maintenance, CRM updates, document organization, case tracking',
+          deliverables: 'Structured CRM, 5S document filing, Case tracking',
+          metrics: 'Admin time -60%, Zero lost files',
         },
         {
-          title: 'Cost Control & Optimization',
-          description: 'Cost analysis, waste identification, cost of non-quality reduction, ROI action plans',
-          deliverables: 'Cost Mapping, Savings Plans, ROI Tracking',
-          metrics: 'Identified Savings, Tracked ROI',
+          title: 'Quotes, invoicing & follow-ups',
+          description: 'Quote/invoice preparation, payment follow-ups, payment tracking',
+          deliverables: 'Same-day quotes, Automated invoices, 1/2/3 follow-ups',
+          metrics: 'Payment delay -45%, Recovered revenue +25%',
         },
         {
-          title: 'Finance Automation & AI',
-          description: 'Reporting automation, internal AI chatbots, anomaly detection, analysis generation',
-          deliverables: 'Automated Reporting, AI Assistants, Smart Alerts',
-          metrics: 'Manual Time -90%, Reliability +100%',
+          title: 'Disputes & after-sales',
+          description: 'Complaint handling, dispute resolution, client emergency management',
+          deliverables: 'Resolution process, Complaint tracking, After-sales reporting',
+          metrics: 'Resolution <24h, Post-dispute retention +60%',
         },
         {
-          title: 'Data Quality & Governance',
-          description: 'Data quality audit, standardization, inconsistency correction, KPI certification',
-          deliverables: 'Quality Diagnostic, Correction Plan, Documentation',
-          metrics: 'Errors -80%, Data Trust +100%',
+          title: 'Planning & coordination',
+          description: 'Schedule management, appointment booking, intervention planning coordination',
+          deliverables: 'Optimized calendar, Automatic reminders, Field coordination',
+          metrics: 'Zero missed appointments, Occupancy rate +30%',
         },
         {
-          title: 'Finance Operational Excellence',
-          description: 'Finance process optimization, standardization, team training, continuous improvement',
-          deliverables: 'Optimized Processes, Training, Documentation',
-          metrics: 'Efficiency +40%, Team Satisfaction',
+          title: 'Prospecting & direct sales',
+          description: 'Client portfolio development, field and phone prospecting, lead qualification',
+          deliverables: 'Qualified prospect file, Call scripts, Prospecting reports',
+          metrics: 'Pipeline +50%, Conversion rate +20%',
         },
       ],
     },
     premiumServices: {
       badge: 'Premium Offers',
-      title: 'AI-Powered Finance',
-      subtitle: 'Innovative solutions combining finance, data, AI and operational excellence to transform your organization',
+      title: 'Humans first, AI as backup',
+      subtitle: 'Structured packages combining field expertise, proven processes and artificial intelligence for measurable results',
       services: [
         {
-          title: 'Automated Financial Reporting & AI',
-          description: 'Building internal AI assistants, complete automation of monthly reporting, autonomous variance detection and automatic generation of actionable financial analyses.',
+          title: 'Zero Chaos Office',
+          description: 'The starter pack for entrepreneurs starting from scratch or drowning in paperwork. Complete admin diagnostic, CRM setup, quote/invoice/follow-up process creation, 5S document organization.',
           keyPoints: [
-            'Internal AI chatbot trained on client data',
-            'Monthly reporting produced automatically',
-            'Automatic anomaly & variance detection',
-            'Manual work reduction (20h → 20 min)',
-            'Financial data security & reliability',
+            'Express diagnostic of your administrative maturity',
+            'CRM setup adapted to your business',
+            'Standardized processes: quote → invoice → follow-up',
+            '5S organization of your documents and files',
+            'Training to maintain the system independently',
           ],
-          badge: 'Exclusive Vyxo offer — no equivalent competition in the market.',
+          badge: 'Ideal for creators and overwhelmed craftsmen.',
         },
         {
-          title: 'Predictive Financial Modeling',
-          description: 'Creating predictive models to anticipate margin, cash burn, risks, product profitability or the impact of a strategic decision.',
-          techStack: ['R Studio', 'Python', 'Advanced Excel (Power Pivot)', 'Power BI', 'Predictive AI Models'],
-          deliverables: [
-            'Intelligent 3/6/12-month forecast',
-            'Decision impact simulation',
-            'Dynamic financial models',
+          title: 'Sales Machine',
+          description: 'The growth pack for those who want to scale. Intelligent CRM with AI lead scoring, automated and personalized follow-ups, targeted prospecting, auto-generated monthly reporting.',
+          keyPoints: [
+            'AI-enriched CRM: hot/warm/cold lead scoring',
+            'Smart follow-ups: AI prepares, Laury personalizes',
+            'Targeted prospecting: qualified file + scripts',
+            'Auto-generated monthly reporting + field analysis',
+            'SMB dashboard: quotes, conversions, revenue, unpaid',
           ],
-          badge: 'Premium product highly sought after by finance departments.',
+          badge: 'For pros who want to bring in revenue, not just file papers.',
         },
         {
-          title: 'Vyxo Data Quality Scan™',
-          description: 'High-level audit of financial data quality: identification of errors, duplicates, Excel inconsistencies, flow breaks, variance anomalies and poor quality KPIs.',
-          diagnosticContent: [
-            'Audit of Excel files / systems / reporting',
-            'Error source analysis',
-            'Data inconsistency mapping',
-            'Data quality scoring',
-            'Correction & standardization plan',
+          title: 'Complete Outsourced Office',
+          description: 'The peace-of-mind pack: admin + sales + client relations + dashboard + AI. The boss doesn\'t touch anything except their craft. A true turnkey outsourced office.',
+          keyPoints: [
+            'Complete outsourced administrative management',
+            'End-to-end sales follow-up with AI',
+            'Client relations: reception, after-sales, retention',
+            'Management dashboard co-designed with our data experts',
+            'Hybrid reception: AI chatbot + guaranteed human callback',
           ],
-          badge: 'A unique service in the market, combining finance, data and operational excellence.',
+          badge: 'The long-term partnership to never think about admin again.',
         },
       ],
       differentiation: {
-        text: 'Nicolas combines finance, data, AI and operational excellence to transform organizations.',
-        tagline: 'A rare and powerful profile.',
+        text: 'Laury combines 17 years of field experience, operational rigor and AI tools for a service that no one else offers in freelance assistance.',
+        tagline: 'AI does the repetitive work. Laury does the relational work.',
       },
     },
+    transport: {
+      badge: 'Sector Expertise',
+      title: 'Transport & Logistics Experience',
+      subtitle: 'Concrete knowledge of the road transport world',
+      cards: [
+        {
+          title: 'Sourcing & competitive bidding',
+          description: 'Consulting about ten carriers per freight request, comparing offers',
+        },
+        {
+          title: 'Evaluation & rating',
+          description: 'Co-design of a tracking table and rating system (response time, reliability, flexibility, schedule compliance, exchange quality)',
+        },
+        {
+          title: 'Carrier messaging management',
+          description: 'Daily interface between internal teams and carrier panel',
+        },
+        {
+          title: 'Price benchmarking',
+          description: 'Comparative rate tables by geographic area and weight range',
+        },
+        {
+          title: 'Panel development',
+          description: 'Meetings with new carriers to integrate the most relevant ones',
+        },
+      ],
+    },
     timeline: {
-      title: 'Professional Experience',
-      subtitle: '10+ years of finance and performance expertise',
+      title: 'My Background',
+      subtitle: '17 years of experience in client relations and business development',
       jobs: [
         {
-          title: 'Finance & Performance Consultant',
-          company: 'Vyxo Consulting',
-          location: 'France',
-          description: 'Financial management, data and operational excellence consulting for SMEs and mid-caps',
+          title: 'Client Manager',
+          company: 'Selfcity',
+          location: 'Toulouse',
+          description: 'B2C/B2B client relations, retention, supplier management, disputes and after-sales',
           achievements: [
-            'Supported 15+ clients in finance transformation',
-            'Financial reporting automation (90% time savings)',
-            'Implementation of multi-country management systems',
+            'B2C and B2B client portfolio management',
+            'Retention and satisfaction tracking',
+            'Dispute resolution and after-sales claims',
           ],
         },
         {
-          title: 'Group Management Controller',
-          company: 'International Group',
-          location: 'France / Belgium / Germany',
-          description: 'Multi-country financial management, budgeting, forecasting and cost control',
+          title: 'Sales Assistant',
+          company: 'Soval SA',
+          location: 'Toulouse',
+          description: 'B2B client relations (construction/public sector), orders, invoicing, follow-ups, carrier management',
           achievements: [
-            'Annual budget management €50M',
-            'Monthly rolling forecast 3 countries',
-            'Operating cost reduction -15%',
+            'B2B construction & public sector client management',
+            'Invoicing, follow-ups and payment tracking',
+            'Carrier panel sourcing and evaluation',
           ],
         },
         {
-          title: 'Senior Financial Analyst',
-          company: 'Consulting Firm',
-          location: 'Paris',
-          description: 'Financial analysis, modeling, due diligence and business plans',
+          title: 'Sales Advisor',
+          company: 'Proxigaz (Butagaz)',
+          location: 'Toulouse',
+          description: 'Cancellation service, complaints, CRM, quotes, retention and direct sales',
           achievements: [
-            'Financial modeling 20+ projects',
-            'Acquisition due diligence',
-            'Strategic business plans',
+            'Client retention and churn reduction',
+            'CRM management and pipeline tracking',
+            'Direct sales and upselling',
           ],
         },
-      ],
-    },
-    beforeAfter: {
-      title: 'Before / After my intervention',
-      subtitle: 'Concrete transformation of your financial and operational performance',
-      before: 'Before',
-      after: 'After',
-      comparisons: [
         {
-          before: 'Unclear margins, uncontrolled costs',
-          after: 'Margin drivers identified and managed',
+          title: 'Administrative Support',
+          company: 'GRDF Occitanie',
+          location: 'Toulouse',
+          description: 'Tour planning, inbound/outbound call management',
+          achievements: [
+            'Technician tour scheduling coordination',
+            'Inbound/outbound call flow management',
+            'Field logistics organization',
+          ],
         },
         {
-          before: 'Monthly reporting in 20h, frequent errors',
-          after: 'Automated reporting in 20 min, reliable',
+          title: 'Client Advisor',
+          company: 'Engie Home Services',
+          location: 'Toulouse',
+          description: 'Appointment booking, client file creation',
+          achievements: [
+            'Request reception and qualification',
+            'Client file creation and tracking',
+            'Appointment booking and coordination',
+          ],
         },
         {
-          before: 'No forecast, flying blind',
-          after: 'Structured budget + reliable rolling forecast',
+          title: 'Sales Advisor',
+          company: 'Solocal',
+          location: 'Toulouse',
+          description: 'Field and phone prospecting, direct sales',
+          achievements: [
+            'Field and phone prospecting',
+            'Direct sales of digital solutions',
+            'Client portfolio development',
+          ],
         },
         {
-          before: 'Inconsistent Excel data, duplicates',
-          after: 'Data quality under control, certified KPIs',
+          title: 'Assistant Manager',
+          company: 'Jeff de Bruges',
+          location: 'Toulouse',
+          description: 'Retail, team management, client retention, dispute management',
+          achievements: [
+            'Sales team management',
+            'Retention and client programs',
+            'Dispute management and satisfaction',
+          ],
         },
         {
-          before: 'Hidden costs, invisible waste',
-          after: 'Cost of non-quality measured + tracked ROI',
-        },
-      ],
-    },
-    roi: {
-      title: 'Measurable Impact',
-      subtitle: 'Concrete and quantifiable results',
-      metrics: [
-        {
-          value: '-90%',
-          label: 'Reporting time',
-          description: 'Complete automation of monthly reporting',
-        },
-        {
-          value: '+30%',
-          label: 'Forecast accuracy',
-          description: 'Predictive models and simulations',
-        },
-        {
-          value: '-15%',
-          label: 'Operating costs',
-          description: 'Optimization and waste elimination',
-        },
-        {
-          value: '100%',
-          label: 'Data reliability',
-          description: 'Data quality and governance',
+          title: 'Checkout Team Leader',
+          company: 'Total',
+          location: 'Toulouse',
+          description: 'Client relations, inventory management, team management',
+          achievements: [
+            'Checkout team management',
+            'Direct client relations',
+            'Inventory management and supply',
+          ],
         },
       ],
     },
     whyMe: {
       title: 'Why choose me?',
-      subtitle: 'A unique profile combining finance, data and operational excellence',
+      subtitle: 'Not a virtual assistant. A field partner.',
       reasons: [
         {
-          title: 'Multi-Country Finance Expertise',
-          description: '10+ years of experience in financial management France, Belgium, Germany',
+          title: 'Field first',
+          description: '17 years of direct practice facing demanding clients. Butagaz, GRDF, Engie, Soval. My experience is not theoretical — it\'s built call after call.',
         },
         {
-          title: 'Data & AI Mastery',
-          description: 'Power BI, Python, R, Advanced Excel, automation and AI',
+          title: 'Dual sales & admin capability',
+          description: 'Prospecting + complete admin follow-up (quotes, invoices, follow-ups, CRM). I don\'t file papers, I bring in revenue.',
         },
         {
-          title: 'Operational Excellence',
-          description: 'Process optimization, quality, continuous improvement',
+          title: 'Transport knowledge',
+          description: 'Selection, evaluation and management of road carriers. I speak the same language as field and road professionals.',
         },
         {
-          title: 'Measurable Results',
-          description: 'Tracked ROI, certified KPIs, quantifiable impact',
+          title: 'Resolution under pressure',
+          description: 'Disputes, after-sales, emergencies, turning problems into retention opportunities. 17 years of defusing tensions and turning problems into opportunities.',
         },
       ],
     },
     method: {
       badge: 'My Method',
-      title: 'Vyxo Method — 5 steps',
-      subtitle: 'A structured and proven approach to transform your financial performance, quality and operations',
+      title: 'Getting started in three steps',
+      subtitle: 'Simple, concrete and no commitment. You know exactly what you\'re getting.',
       steps: [
         {
-          title: 'Financial & operational quality diagnostic',
-          description: 'Precise analysis of margins, costs, variances, data reliability and process maturity.',
+          title: 'We talk',
+          description: 'A 20-minute call to understand your business, identify what takes up most of your time and define what I can take over immediately.',
         },
         {
-          title: 'Flow, data & risk mapping',
-          description: 'Identification of process breaks, data inconsistencies, operational risks and variability sources.',
+          title: 'I propose a plan',
+          description: 'A monthly package adapted to your actual volume. No oversized package, no end-of-month surprises. You know exactly what it costs.',
         },
         {
-          title: 'Standardization & Operational Excellence',
-          description: 'Creation of processes, financial models and homogeneous management rules for stable performance.',
-        },
-        {
-          title: 'KPI, Automation & Management Systems',
-          description: 'Building Power BI / Advanced Excel dashboards and automation of quality + finance reporting.',
-        },
-        {
-          title: 'Management, Excellence & ROI',
-          description: 'CEO/Executive support, cost optimization and cost of non-quality reduction with measurable gains.',
+          title: 'I take over',
+          description: 'You focus on your craft. I handle admin, sales and client relations. You get back time, cash flow and clients.',
         },
       ],
     },
     skills: {
       title: 'Skills & Tools',
-      subtitle: 'Technical stack and expertise',
+      subtitle: 'Field expertise enhanced by AI',
       categories: [
         {
-          title: 'Finance & Management',
-          skills: ['Management Control', 'Budgeting & Forecasting', 'Cost Control', 'Financial Analysis', 'Business Planning'],
+          title: 'Client Relations',
+          skills: ['Phone reception', 'Retention', 'After-sales & Disputes', 'Client satisfaction', 'Complaint management'],
         },
         {
-          title: 'Data & BI',
-          skills: ['Power BI', 'Advanced Excel', 'Power Query', 'DAX', 'SQL'],
+          title: 'Sales',
+          skills: ['Field prospecting', 'Phone prospecting', 'Direct sales', 'Lead qualification', 'Negotiation'],
         },
         {
-          title: 'AI & Automation',
-          skills: ['Python', 'R Studio', 'Predictive Models', 'AI Chatbots', 'Automation'],
+          title: 'Administration',
+          skills: ['Quotes & Invoicing', 'CRM', '5S Organization', 'Filing', 'Case tracking'],
         },
         {
-          title: 'ERP & Systems',
-          skills: ['SAP', 'Oracle', 'NetSuite', 'Sage', 'Cegid'],
-        },
-      ],
-    },
-    diplomas: {
-      title: 'Education & Certifications',
-      subtitle: 'Academic and professional background',
-      items: [
-        {
-          title: 'Master II Corporate Finance',
-          institution: 'Business School',
-          year: '2013',
-          description: 'Specialization in Finance, Management Control, Audit',
-        },
-        {
-          title: 'Data & BI Certifications',
-          institution: 'Self-taught',
-          year: '2018-2024',
-          description: 'Power BI, Python, R, Advanced Excel, AI',
-        },
-        {
-          title: 'Management Control Certification',
-          institution: 'DFCG',
-          year: '2015',
-          description: 'Diploma from the Federation of Management Controllers',
-        },
-      ],
-    },
-    testimonials: {
-      title: 'Testimonials',
-      subtitle: 'What my clients say',
-      items: [
-        {
-          name: 'Marie Dubois',
-          role: 'Chief Financial Officer',
-          company: 'Industrial Group',
-          text: 'Nicolas transformed our financial reporting. We saved 90% of time and reliability is perfect.',
-        },
-        {
-          name: 'Jean Martin',
-          role: 'CEO',
-          company: 'Tech Startup',
-          text: 'A true expert who combines finance and data. His predictive models allowed us to anticipate our cash needs.',
-        },
-        {
-          name: 'Sophie Laurent',
-          role: 'Management Controller',
-          company: 'Export SME',
-          text: 'Quality support, measurable results. Nicolas structured our multi-country management.',
+          title: 'AI & Tools',
+          skills: ['AI Follow-ups', 'Lead scoring', 'Auto reporting', 'Reception chatbot', 'SMB Dashboard'],
         },
       ],
     },
     cta: {
-      title: 'Ready to transform your financial performance?',
-      subtitle: 'Let\'s discuss your project and objectives',
-      button: 'Schedule a meeting',
+      title: 'Let\'s talk about your project',
+      subtitle: 'Business development, client relations management, onboarding — let\'s discuss how I can contribute to your growth.',
+      button: 'Book my discovery call',
     },
     footer: {
-      tagline: 'Finance Expert • Data • AI • Operational Excellence',
+      tagline: 'Administrative & commercial partner for craftsmen, small businesses and entrepreneurs',
       navigation: {
         title: 'Navigation',
         links: [
           { label: 'Services', href: '#services' },
           { label: 'Premium Offers', href: '#premium-services' },
-          { label: 'Experience', href: '#experience' },
+          { label: 'Background', href: '#timeline' },
           { label: 'Method', href: '#method' },
           { label: 'Skills', href: '#skills' },
           { label: 'Contact', href: '#contact' },
@@ -918,18 +834,18 @@ export const translations: Record<Language, Translations> = {
       services: {
         title: 'Services',
         links: [
-          { label: 'Financial Management', href: '#services' },
-          { label: 'Budgeting & Forecasting', href: '#services' },
-          { label: 'Cost Control', href: '#services' },
-          { label: 'Automation & AI', href: '#services' },
-          { label: 'Data Quality', href: '#services' },
-          { label: 'Operational Excellence', href: '#services' },
+          { label: 'Client Relations', href: '#services' },
+          { label: 'Administrative Management', href: '#services' },
+          { label: 'Sales Follow-up', href: '#services' },
+          { label: 'Prospecting', href: '#services' },
+          { label: 'Transport & Logistics', href: '#transport' },
+          { label: 'AI Premium Offers', href: '#premium-services' },
         ],
       },
       contact: {
         title: 'Contact',
-        email: 'nicolas.lemoine@vyxoconsult.com',
-        phone: '06.00.00.00.00',
+        email: 'contact@lebureaudelaury.fr',
+        phone: 'To be filled',
         linkedin: 'LinkedIn',
       },
       legal: {
@@ -940,10 +856,10 @@ export const translations: Record<Language, Translations> = {
           { label: 'Terms & Conditions', href: '/terms' },
         ],
       },
-      copyright: '© 2024 Nicolas Lemoine - Vyxo Consulting. All rights reserved.',
+      copyright: '© 2026 Le Bureau de Laury. All rights reserved.',
     },
     floatingCta: {
-      text: 'Let\'s discuss your project',
+      text: 'Book a discovery call',
     },
   },
 }

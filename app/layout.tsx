@@ -3,15 +3,16 @@ import type { Metadata } from "next"
 import { Inter, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { LanguageProvider } from "@/lib/i18n/LanguageContext"
+import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 
 const _inter = Inter({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Nicolas Lemoine | Chief Performance & Finance Strategist | Vyxo Consulting",
+  title: "Le Bureau de Laury | Assistante administrative & commerciale pour artisans et TPE",
   description:
-    "Expert en contrôle de gestion, pilotage de la performance et optimisation financière. Finance prédictive, IA finance, automatisation reporting, data quality audit, Power BI, Excel avancé. Services premium : reporting automatisé par IA, modélisation financière prédictive, Vyxo Data Quality Scan™.",
+    "Le Bureau de Laury — Votre partenaire administrative et commerciale à distance. Gestion admin, suivi commercial et relation client pour artisans, TPE et entrepreneurs. 17 ans d'expérience.",
   generator: "v0.app",
   icons: {
     icon: [
@@ -38,12 +39,19 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="fr">
+    <html lang="fr" suppressHydrationWarning>
       <body className={`font-sans antialiased`}>
-        <LanguageProvider>
-          {children}
-          <Analytics />
-        </LanguageProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <LanguageProvider>
+            {children}
+            <Analytics />
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

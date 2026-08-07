@@ -1,12 +1,12 @@
 'use client'
 
-import { Globe, Users, Cpu, Rocket } from "lucide-react"
+import { Hammer, Layers, Truck, ShieldCheck } from "lucide-react"
 import { useTranslation } from "@/lib/i18n/useTranslation"
 
 export function WhyMeSection() {
   const { t } = useTranslation()
 
-  const icons = [Globe, Users, Cpu, Rocket]
+  const icons = [Hammer, Layers, Truck, ShieldCheck]
 
   return (
     <section className="py-20">
@@ -22,7 +22,7 @@ export function WhyMeSection() {
             return (
               <div
                 key={reason.title}
-                className="bg-card border border-border rounded-xl p-6 hover:border-primary/50 transition-all group"
+                className="bg-card border-l-4 border-l-primary border border-border rounded-xl p-6 hover:border-primary/50 transition-all group"
               >
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                   <Icon className="w-6 h-6 text-primary" />

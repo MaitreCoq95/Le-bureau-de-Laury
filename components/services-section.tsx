@@ -1,12 +1,12 @@
 'use client'
 
-import { Briefcase, TrendingUp, DollarSign, Bot, Database, Zap } from "lucide-react"
+import { Users, FolderOpen, FileText, ShieldAlert, CalendarClock, Target } from "lucide-react"
 import { useTranslation } from "@/lib/i18n/useTranslation"
 
 export function ServicesSection() {
   const { t } = useTranslation()
 
-  const icons = [Briefcase, TrendingUp, DollarSign, Bot, Database, Zap]
+  const icons = [Users, FolderOpen, FileText, ShieldAlert, CalendarClock, Target]
 
   return (
     <section id="services" className="py-20">
@@ -31,11 +31,11 @@ export function ServicesSection() {
                 <p className="text-sm text-muted-foreground mb-4">{service.description}</p>
                 <div className="space-y-2 text-xs">
                   <div>
-                    <span className="text-primary font-medium">Deliverables:</span>
+                    <span className="text-primary font-medium">Livrables :</span>
                     <p className="text-muted-foreground">{service.deliverables}</p>
                   </div>
                   <div>
-                    <span className="text-primary font-medium">Metrics:</span>
+                    <span className="text-accent font-medium">Impact :</span>
                     <p className="text-muted-foreground">{service.metrics}</p>
                   </div>
                 </div>

@@ -1,20 +1,22 @@
-import { Target, Brain, Cpu } from "lucide-react"
+'use client'
+
+import { Heart, Brain, Bot } from "lucide-react"
 
 const traits = [
   {
-    icon: Target,
-    title: "Excellence opérationnelle + terrain",
-    description: "Pas de théorie, que du concret et de l'impact mesurable",
+    icon: Heart,
+    title: "L'humain d'abord",
+    description: "17 ans de terrain, face-à-face clients. La confiance se construit par le contact, pas par un algorithme.",
   },
   {
     icon: Brain,
-    title: "Leadership calme, structuré",
-    description: "Orienté décision, pédagogue et diplomate",
+    title: "Rigueur opérationnelle",
+    description: "Process structurés, 5S documentaire, zéro dossier perdu. La méthode au service de l'efficacité.",
   },
   {
-    icon: Cpu,
-    title: "Digitalisation + IA",
-    description: "QSE nouvelle génération, automatisé et intelligent",
+    icon: Bot,
+    title: "L'IA en renfort",
+    description: "Relances intelligentes, scoring leads, reporting auto-généré. L'IA fait le répétitif, Laury fait le relationnel.",
   },
 ]
 
@@ -24,6 +26,7 @@ export function DNASection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Mon ADN</h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">L'IA fait le travail répétitif. Laury fait le travail relationnel.</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">

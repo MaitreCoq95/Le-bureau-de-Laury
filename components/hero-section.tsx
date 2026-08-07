@@ -8,19 +8,16 @@ export function HeroSection() {
   const { t } = useTranslation()
 
   const badges = [
-    "Excel Expert",
-    "Power BI",
-    "SAP",
-    "Budgeting & Forecasting",
-    "Cost Control",
-    "Business Analysis",
-    "Data Quality",
-    "Financial Reporting"
+    "Relation client",
+    "Prospection",
+    "CRM",
+    "Fidélisation",
+    "Transport",
+    "Facturation",
   ]
 
   return (
     <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden">
-      {/* Background gradient */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
@@ -59,18 +56,18 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Right Content - Profile Image */}
+          {/* Right Content - Profile Photo */}
           <div className="relative lg:pl-12">
             <div className="relative">
               {/* Decorative elements */}
               <div className="absolute -top-4 -left-4 w-72 h-72 bg-primary/10 rounded-2xl -z-10" />
-              <div className="absolute -bottom-4 -right-4 w-72 h-72 bg-primary/5 rounded-2xl -z-10" />
+              <div className="absolute -bottom-4 -right-4 w-72 h-72 bg-accent/5 rounded-2xl -z-10" />
 
-              {/* Image container */}
+              {/* Photo container */}
               <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-2xl overflow-hidden border-2 border-primary/30">
                 <img
-                  src="/nicolas-lemoine-profile.png"
-                  alt="Nicolas Lemoine - Chief Performance & Finance Strategist"
+                  src="/laury-martin-profile.jpg"
+                  alt="Laury Martin — Relation Client & Développement Commercial"
                   className="w-full h-full object-cover object-top"
                 />
               </div>
@@ -79,23 +76,23 @@ export function HeroSection() {
               <div className="absolute -bottom-6 -left-6 bg-card border border-border rounded-xl p-4 shadow-lg">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <span className="text-2xl font-bold text-primary">10+</span>
+                    <span className="text-2xl font-bold text-primary">17</span>
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-foreground">{t.hero.stats.experience}</p>
-                    <p className="text-xs text-muted-foreground">Finance & Data</p>
+                    <p className="text-xs text-muted-foreground">Relation client</p>
                   </div>
                 </div>
               </div>
 
               <div className="absolute -top-6 -right-6 bg-card border border-border rounded-xl p-4 shadow-lg">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <span className="text-2xl font-bold text-primary">3</span>
+                  <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center">
+                    <span className="text-2xl font-bold text-accent">8</span>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-foreground">{t.hero.stats.countries}</p>
-                    <p className="text-xs text-muted-foreground">FR/BE/DE</p>
+                    <p className="text-sm font-semibold text-foreground">{t.hero.stats.companies}</p>
+                    <p className="text-xs text-muted-foreground">5 {t.hero.stats.sectors}</p>
                   </div>
                 </div>
               </div>
