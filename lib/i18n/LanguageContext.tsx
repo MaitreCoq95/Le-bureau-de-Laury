@@ -9,32 +9,47 @@ interface LanguageContextType {
   toggleLanguage: () => void
 }
 
+const STORAGE_KEY = 'language'
+
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
+
+function isLanguage(value: string | null): value is Language {
+  return value === 'fr' || value === 'en'
+}
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>('fr')
-  const [mounted, setMounted] = useState(false)
 
-  // Load language from localStorage on mount
+  // Lecture de la préférence persistée. Le rendu serveur ne connaît pas
+  // localStorage : cette synchronisation ne peut avoir lieu qu'après montage.
   useEffect(() => {
-    setMounted(true)
-    const savedLanguage = localStorage.getItem('language') as Language
-    if (savedLanguage && (savedLanguage === 'fr' || savedLanguage === 'en')) {
-      setLanguageState(savedLanguage)
+    try {
+      const saved = window.localStorage.getItem(STORAGE_KEY)
+      if (isLanguage(saved)) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- hydratation depuis un store externe
+        setLanguageState(saved)
+      }
+    } catch (error) {
+      console.warn('[LanguageProvider] localStorage unavailable:', error)
     }
   }, [])
 
-  // Save language to localStorage when it changes
+  // <html lang> doit suivre la langue affichée (SEO, lecteurs d'écran).
+  useEffect(() => {
+    document.documentElement.lang = language
+  }, [language])
+
   const setLanguage = (lang: Language) => {
     setLanguageState(lang)
-    if (mounted) {
-      localStorage.setItem('language', lang)
+    try {
+      window.localStorage.setItem(STORAGE_KEY, lang)
+    } catch (error) {
+      console.warn('[LanguageProvider] could not persist language:', error)
     }
   }
 
   const toggleLanguage = () => {
-    const newLang = language === 'fr' ? 'en' : 'fr'
-    setLanguage(newLang)
+    setLanguage(language === 'fr' ? 'en' : 'fr')
   }
 
   return (

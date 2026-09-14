@@ -141,6 +141,14 @@ export interface Translations {
   floatingCta: {
     text: string
   }
+  dna: {
+    title: string
+    subtitle: string
+    traits: Array<{
+      title: string
+      description: string
+    }>
+  }
 }
 
 export const translations: Record<Language, Translations> = {
@@ -502,6 +510,27 @@ export const translations: Record<Language, Translations> = {
     floatingCta: {
       text: 'Réserver un appel découverte',
     },
+    dna: {
+      title: 'Mon ADN',
+      subtitle: "L'IA fait le travail répétitif. Laury fait le travail relationnel.",
+      traits: [
+        {
+          title: "L'humain d'abord",
+          description:
+            '17 ans de terrain, face-à-face clients. La confiance se construit par le contact, pas par un algorithme.',
+        },
+        {
+          title: 'Rigueur opérationnelle',
+          description:
+            'Process structurés, 5S documentaire, zéro dossier perdu. La méthode au service de l\'efficacité.',
+        },
+        {
+          title: "L'IA en renfort",
+          description:
+            "Relances intelligentes, scoring leads, reporting auto-généré. L'IA fait le répétitif, Laury fait le relationnel.",
+        },
+      ],
+    },
   },
   en: {
     header: {
@@ -860,6 +889,27 @@ export const translations: Record<Language, Translations> = {
     },
     floatingCta: {
       text: 'Book a discovery call',
+    },
+    dna: {
+      title: 'What drives me',
+      subtitle: 'AI handles the repetitive work. Laury handles the relationships.',
+      traits: [
+        {
+          title: 'People first',
+          description:
+            '17 years in the field, face to face with clients. Trust is built through contact, not through an algorithm.',
+        },
+        {
+          title: 'Operational rigour',
+          description:
+            'Structured processes, documented 5S, not a single file lost. Method in service of efficiency.',
+        },
+        {
+          title: 'AI as backup',
+          description:
+            'Smart follow-ups, lead scoring, auto-generated reporting. AI does the repetitive work, Laury does the relational work.',
+        },
+      ],
     },
   },
 }

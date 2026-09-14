@@ -1,11 +1,10 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useTransition } from "react"
 import {
   ClipboardCheck,
   ArrowRight,
   ArrowLeft,
-  ChevronRight,
   TrendingUp,
   Clock,
   Euro,
@@ -26,6 +25,7 @@ import {
   Send,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { submitLead } from "@/app/actions/submit-lead"
 import { Card, CardContent } from "@/components/ui/card"
 
 /* ────────────────────────────────────────
@@ -283,11 +283,44 @@ export function DiagnosticSection() {
   const [step, setStep] = useState(0)
   const [form, setForm] = useState<FormData>(defaultForm)
   const [submitted, setSubmitted] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [isSending, startSending] = useTransition()
 
   const totalSteps = 4
 
   const roi = useMemo(() => calculateROI(form), [form])
   const recommendation = useMemo(() => recommendPack(form), [form])
+
+  const canSubmit =
+    form.name.trim() !== "" && form.email.trim() !== "" && !isSending
+
+  const handleSubmit = () => {
+    if (!canSubmit) return
+    setSubmitError(null)
+
+    startSending(async () => {
+      const result = await submitLead({
+        name: form.name,
+        email: form.email,
+        sector: form.sector,
+        employees: form.employees,
+        revenue: form.revenue,
+        hoursAdmin: form.hoursAdmin,
+        hoursCommercial: form.hoursCommercial,
+        hoursRelationClient: form.hoursRelationClient,
+        hourlyRate: form.hourlyRate,
+        painPoints: form.painPoints,
+        roi,
+        recommendedPack: recommendation.pack,
+      })
+
+      if (result.ok) {
+        setSubmitted(true)
+        return
+      }
+      setSubmitError(result.error)
+    })
+  }
 
   const canProceed = () => {
     switch (step) {
@@ -437,7 +470,7 @@ export function DiagnosticSection() {
 
                   {/* CA */}
                   <label className="block text-sm font-medium text-foreground mb-3">
-                    Chiffre d'affaires annuel
+                    Chiffre d&apos;affaires annuel
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     {revenueRanges.map((r) => (
@@ -465,7 +498,7 @@ export function DiagnosticSection() {
               <div className="space-y-8 animate-fade-in-up">
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-1">
-                    Combien d'heures par semaine perdez-vous ?
+                    Combien d&apos;heures par semaine perdez-vous ?
                   </h3>
                   <p className="text-sm text-muted-foreground mb-6">
                     Estimez le temps passé sur des tâches qui ne sont pas votre
@@ -605,10 +638,10 @@ export function DiagnosticSection() {
               <div className="space-y-6 animate-fade-in-up">
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-1">
-                    Qu'est-ce qui vous pèse le plus ?
+                    Qu&apos;est-ce qui vous pèse le plus ?
                   </h3>
                   <p className="text-sm text-muted-foreground mb-6">
-                    Sélectionnez tout ce qui vous parle — c'est ce qui nous
+                    Sélectionnez tout ce qui vous parle — c&apos;est ce qui nous
                     permettra de recommander la bonne formule.
                   </p>
 
@@ -821,7 +854,7 @@ export function DiagnosticSection() {
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       Ces estimations sont basées sur les résultats moyens
-                      observés chez des profils similaires au vôtre. L'IA
+                      observés chez des profils similaires au vôtre. L&apos;IA
                       automatise le répétitif, Laury gère le relationnel.
                     </p>
                   </div>
@@ -866,11 +899,22 @@ export function DiagnosticSection() {
                     <Button
                       size="lg"
                       className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
-                      onClick={() => setSubmitted(true)}
+                      onClick={handleSubmit}
+                      disabled={!canSubmit}
                     >
                       <Send className="w-4 h-4 mr-2" />
-                      Recevoir mon diagnostic + réserver un appel
+                      {isSending
+                        ? "Envoi en cours…"
+                        : "Recevoir mon diagnostic + réserver un appel"}
                     </Button>
+                    {submitError && (
+                      <p
+                        role="alert"
+                        className="text-sm text-destructive text-center mt-3"
+                      >
+                        {submitError}
+                      </p>
+                    )}
                     <p className="text-xs text-muted-foreground text-center mt-3">
                       Pas de spam. Laury vous contacte personnellement.
                     </p>

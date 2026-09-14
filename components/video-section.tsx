@@ -10,6 +10,7 @@ export function VideoSection() {
             loop
             muted
             playsInline
+            preload="metadata"
             className="w-full h-auto block"
           >
             <source src="/video-avant-apres.mp4" type="video/mp4" />
