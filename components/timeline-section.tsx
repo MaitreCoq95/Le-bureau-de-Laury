@@ -6,54 +6,54 @@ import { useTranslation } from "@/lib/i18n/useTranslation"
 
 const timelineIcons = [Users, Briefcase, Phone, Building2, Home, Megaphone, ShoppingBag, Fuel]
 
-const timelineSkills = [
+const timelineSkills: Array<Array<{ name: string }>> = [
   [
-    { name: "Relation Client", value: 95 },
-    { name: "Fidélisation", value: 90 },
-    { name: "SAV & Litiges", value: 90 },
-    { name: "Gestion Fournisseurs", value: 85 },
+    { name: "Relation Client" },
+    { name: "Fidélisation" },
+    { name: "SAV & Litiges" },
+    { name: "Gestion Fournisseurs" },
   ],
   [
-    { name: "B2B Commercial", value: 90 },
-    { name: "Facturation", value: 95 },
-    { name: "Transport", value: 90 },
-    { name: "Relances", value: 95 },
+    { name: "B2B Commercial" },
+    { name: "Facturation" },
+    { name: "Transport" },
+    { name: "Relances" },
   ],
   [
-    { name: "Fidélisation", value: 95 },
-    { name: "CRM", value: 85 },
-    { name: "Vente Directe", value: 85 },
-    { name: "Réclamations", value: 90 },
+    { name: "Fidélisation" },
+    { name: "CRM" },
+    { name: "Vente Directe" },
+    { name: "Réclamations" },
   ],
   [
-    { name: "Planification", value: 90 },
-    { name: "Coordination", value: 85 },
-    { name: "Appels", value: 90 },
-    { name: "Organisation", value: 85 },
+    { name: "Planification" },
+    { name: "Coordination" },
+    { name: "Appels" },
+    { name: "Organisation" },
   ],
   [
-    { name: "Accueil", value: 85 },
-    { name: "Dossiers Clients", value: 80 },
-    { name: "RDV", value: 85 },
-    { name: "Qualification", value: 80 },
+    { name: "Accueil" },
+    { name: "Dossiers Clients" },
+    { name: "RDV" },
+    { name: "Qualification" },
   ],
   [
-    { name: "Prospection Terrain", value: 95 },
-    { name: "Vente Directe", value: 90 },
-    { name: "Prospection Tel.", value: 90 },
-    { name: "Négociation", value: 85 },
+    { name: "Prospection Terrain" },
+    { name: "Vente Directe" },
+    { name: "Prospection Tel." },
+    { name: "Négociation" },
   ],
   [
-    { name: "Management", value: 85 },
-    { name: "Commerce", value: 90 },
-    { name: "Fidélisation", value: 90 },
-    { name: "Litiges", value: 85 },
+    { name: "Management" },
+    { name: "Commerce" },
+    { name: "Fidélisation" },
+    { name: "Litiges" },
   ],
   [
-    { name: "Management", value: 80 },
-    { name: "Relation Client", value: 85 },
-    { name: "Stocks", value: 80 },
-    { name: "Encaissement", value: 85 },
+    { name: "Management" },
+    { name: "Relation Client" },
+    { name: "Stocks" },
+    { name: "Encaissement" },
   ],
 ]
 
@@ -77,7 +77,7 @@ function HoverCard({
   onClose,
 }: {
   job: { title: string; company: string; location: string; description: string; achievements: string[] }
-  skills: { name: string; value: number }[]
+  skills: { name: string }[]
   period: string
   icon: React.ComponentType<{ className?: string }>
   isVisible: boolean
@@ -110,20 +110,14 @@ function HoverCard({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-2 mb-4">
+          <div className="flex flex-wrap gap-2 mb-4">
             {skills.map((skill, i) => (
-              <div key={i}>
-                <div className="flex justify-between text-xs mb-1">
-                  <span className="text-muted-foreground">{skill.name}</span>
-                  <span className="text-primary font-medium">{skill.value}%</span>
-                </div>
-                <div className="h-2 bg-muted rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-primary rounded-full transition-all duration-700"
-                    style={{ width: `${skill.value}%` }}
-                  />
-                </div>
-              </div>
+              <span
+                key={i}
+                className="px-2.5 py-1 rounded-md bg-primary/10 text-primary text-xs font-medium"
+              >
+                {skill.name}
+              </span>
             ))}
           </div>
 
@@ -249,17 +243,14 @@ export function TimelineSection() {
                       <p className="text-muted-foreground mt-3 text-sm leading-relaxed">{item.description}</p>
 
                       <div className="mt-4 pt-4 border-t border-border">
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="flex flex-wrap gap-2">
                           {timelineSkills[index].slice(0, 4).map((skill, i) => (
-                            <div key={i} className="text-xs">
-                              <div className="flex justify-between mb-1">
-                                <span className="text-muted-foreground truncate">{skill.name}</span>
-                                <span className="text-primary">{skill.value}%</span>
-                              </div>
-                              <div className="h-1 bg-muted rounded-full">
-                                <div className="h-full bg-primary rounded-full" style={{ width: `${skill.value}%` }} />
-                              </div>
-                            </div>
+                            <span
+                              key={i}
+                              className="px-2 py-0.5 rounded bg-primary/10 text-primary text-xs"
+                            >
+                              {skill.name}
+                            </span>
                           ))}
                         </div>
                         <p className="text-xs text-primary/70 mt-2 text-center">Cliquez pour voir plus</p>

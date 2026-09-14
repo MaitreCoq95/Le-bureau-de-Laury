@@ -33,3 +33,7 @@ ts-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# fichiers générés par Next pour les agents
+/AGENTS.md
+/CLAUDE.md

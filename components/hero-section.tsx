@@ -9,11 +9,11 @@ export function HeroSection() {
 
   const badges = [
     "Relation client",
-    "Prospection",
-    "CRM",
+    "Suivi commercial",
+    "Fichier clients",
     "Fidélisation",
     "Transport",
-    "Facturation",
+    "Devis & factures",
   ]
 
   return (

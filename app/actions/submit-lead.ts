@@ -10,9 +10,14 @@ import { z } from 'zod'
 const WEBHOOK_URL = process.env.LEAD_WEBHOOK_URL
 const DELIVERY_TIMEOUT_MS = 8000
 
+const costLine = z.object({
+  hours: z.number().min(0),
+  cost: z.number().min(0),
+})
+
 const leadSchema = z.object({
-  name: z.string().trim().min(1, 'Votre prénom est requis').max(80),
-  email: z.string().trim().email('Adresse email invalide').max(180),
+  name: z.string().trim().min(1).max(80),
+  email: z.string().trim().email().max(180),
   sector: z.string().trim().max(80),
   employees: z.string().trim().max(40),
   revenue: z.string().trim().max(40),
@@ -21,12 +26,24 @@ const leadSchema = z.object({
   hoursRelationClient: z.number().min(0).max(200),
   hourlyRate: z.number().min(0).max(1000),
   painPoints: z.array(z.string().max(60)).max(30),
-  roi: z.record(z.string(), z.number()),
-  recommendedPack: z.string().trim().max(80),
+  cost: z.object({
+    weeklyHours: z.number().min(0),
+    monthlyCost: z.number().min(0),
+    yearlyCost: z.number().min(0),
+    admin: costLine,
+    commercial: costLine,
+    relation: costLine,
+  }),
+  recommendedPack: z.enum(['complet', 'commercial', 'zeroChaos']),
 })
 
 export type LeadInput = z.infer<typeof leadSchema>
 export type LeadResult = { ok: true } | { ok: false; error: string }
+
+const FIELD_ERRORS = {
+  name: 'Merci d\'indiquer votre prénom.',
+  email: 'Cette adresse email ne semble pas valide.',
+} as const
 
 const GENERIC_ERROR =
   "L'envoi a échoué. Réessayez, ou écrivez directement à contact@lebureaudelaury.fr."
@@ -52,8 +69,12 @@ async function deliverLead(lead: LeadInput): Promise<void> {
 export async function submitLead(input: unknown): Promise<LeadResult> {
   const parsed = leadSchema.safeParse(input)
   if (!parsed.success) {
-    const first = parsed.error.issues[0]
-    return { ok: false, error: first?.message ?? 'Formulaire invalide.' }
+    const field = parsed.error.issues[0]?.path[0]
+    if (field === 'name' || field === 'email') {
+      return { ok: false, error: FIELD_ERRORS[field] }
+    }
+    console.error('[submitLead] invalid payload:', parsed.error.issues)
+    return { ok: false, error: GENERIC_ERROR }
   }
 
   try {
