@@ -82,7 +82,8 @@ lib/i18n/translations.ts   tous les textes du site, en un seul endroit
 **Les textes affichés vivent dans `lib/i18n/translations.ts`**, pas dans les
 composants. Pour corriger une formulation, c'est le seul fichier à ouvrir.
 Deux exceptions connues : le diagnostic (`components/diagnostic-section.tsx`)
-et la section vidéo portent encore leurs textes en dur.
+et les intitulés de compétences du parcours (`components/timeline-section.tsx`)
+portent encore leurs textes en dur.
 
 ## Points d'attention
 
@@ -94,6 +95,7 @@ et la section vidéo portent encore leurs textes en dur.
 - **Origine v0.** Le projet a été généré avec [v0.app](https://v0.app). Si la
   synchronisation v0 → GitHub est encore active, une génération depuis v0 peut
   écraser les modifications faites à la main sur `main`.
-- **`public/landing.html`** est une version statique de la page, servie
-  publiquement et non reliée au reste du site. Elle n'est pas mise à jour avec
-  le code : à supprimer ou à maintenir sciemment.
+- **Page statique supprimée.** `public/landing.html` était une copie statique
+  du site, servie publiquement, non reliée au code et donc jamais mise à jour.
+  Elle a été retirée ; elle reste récupérable dans l'historique git si un lien
+  pointait dessus.
