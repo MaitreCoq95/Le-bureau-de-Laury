@@ -23,7 +23,9 @@ yarn-debug.log*
 ts-debug.log*
 
 # local env files
-.env*.local
+.env
+.env.*
+!.env.example
 
 # vercel
 .vercel
@@ -31,3 +33,7 @@ ts-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# fichiers générés par Next pour les agents
+/AGENTS.md
+/CLAUDE.md

@@ -1,16 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { Menu, X, Mail, Languages, Sun, Moon } from "lucide-react"
+import { Menu, X, Mail, Sun, Moon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useTranslation } from "@/lib/i18n/useTranslation"
-import { useLanguageContext } from "@/lib/i18n/LanguageContext"
 import { useTheme } from "next-themes"
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const { t } = useTranslation()
-  const { language, toggleLanguage } = useLanguageContext()
   const { theme, setTheme } = useTheme()
 
   const navItems = [
@@ -60,16 +58,6 @@ export function Header() {
               <Moon className="absolute w-4 h-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             </button>
 
-            {/* Language Switcher */}
-            <button
-              onClick={toggleLanguage}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-border hover:border-primary hover:bg-primary/5 transition-all text-sm font-medium"
-              aria-label="Toggle language"
-            >
-              <Languages className="w-4 h-4" />
-              <span>{language.toUpperCase()}</span>
-            </button>
-
             <a href="mailto:contact@lebureaudelaury.fr">
               <Mail className="w-5 h-5 text-muted-foreground hover:text-primary transition-colors" />
             </a>
@@ -112,18 +100,6 @@ export function Header() {
                 <Moon className="w-4 h-4 hidden dark:block" />
                 <span className="dark:hidden">Mode sombre</span>
                 <span className="hidden dark:block">Mode clair</span>
-              </button>
-
-              {/* Mobile Language Switcher */}
-              <button
-                onClick={() => {
-                  toggleLanguage()
-                  setIsOpen(false)
-                }}
-                className="flex items-center gap-2 px-3 py-2 rounded-md border border-border hover:border-primary hover:bg-primary/5 transition-all text-sm font-medium"
-              >
-                <Languages className="w-4 h-4" />
-                <span>{language === 'fr' ? 'English' : 'Français'}</span>
               </button>
             </div>
 

@@ -1,11 +1,10 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useTransition } from "react"
 import {
   ClipboardCheck,
   ArrowRight,
   ArrowLeft,
-  ChevronRight,
   TrendingUp,
   Clock,
   Euro,
@@ -22,10 +21,10 @@ import {
   CheckCircle2,
   AlertTriangle,
   Zap,
-  Bot,
   Send,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { submitLead } from "@/app/actions/submit-lead"
 import { Card, CardContent } from "@/components/ui/card"
 
 /* ────────────────────────────────────────
@@ -68,9 +67,9 @@ const defaultForm: FormData = {
 
 const sectors = [
   { id: "artisan", label: "Artisan / BTP", icon: Wrench },
-  { id: "commerce", label: "Commerce / Retail", icon: ShoppingBag },
+  { id: "commerce", label: "Commerce / Boutique", icon: ShoppingBag },
   { id: "transport", label: "Transport / Logistique", icon: Truck },
-  { id: "services", label: "Services / Consulting", icon: Briefcase },
+  { id: "services", label: "Services / Conseil", icon: Briefcase },
   { id: "autre", label: "Autre secteur", icon: Building2 },
 ]
 
@@ -102,14 +101,14 @@ const painPointsList = [
     category: "admin",
   },
   {
-    id: "crm",
-    label: "Pas de CRM, tout est dans ma tête",
+    id: "fichierClients",
+    label: "Pas de fichier clients, tout est dans ma tête",
     icon: Users,
     category: "commercial",
   },
   {
-    id: "prospection",
-    label: "Je n'ai pas le temps de prospecter",
+    id: "devisEnAttente",
+    label: "Mes devis restent sans réponse",
     icon: Phone,
     category: "commercial",
   },
@@ -143,134 +142,99 @@ const painPointsList = [
    ROI Calculation Logic
    ──────────────────────────────────────── */
 
-function calculateROI(form: FormData) {
-  const totalHoursLost =
+function calculateCost(form: FormData) {
+  const weeklyHours =
     form.hoursAdmin + form.hoursCommercial + form.hoursRelationClient
-  const costPerMonth = totalHoursLost * 4.33 * form.hourlyRate // monthly
 
-  // Time saved with Laury (conservative estimates)
-  const adminSavingsPercent = 0.6 // -60% temps admin
-  const commercialSavingsPercent = 0.4 // -40% temps commercial
-  const relationSavingsPercent = 0.35 // -35% temps relation client
-
-  const hoursSavedAdmin = form.hoursAdmin * adminSavingsPercent
-  const hoursSavedCommercial = form.hoursCommercial * commercialSavingsPercent
-  const hoursSavedRelation =
-    form.hoursRelationClient * relationSavingsPercent
-
-  const totalHoursSaved =
-    hoursSavedAdmin + hoursSavedCommercial + hoursSavedRelation
-  const monthlySavings = totalHoursSaved * 4.33 * form.hourlyRate
-  const yearlySavings = monthlySavings * 12
-
-  // Additional revenue from better commercial ops
-  const additionalRevenue =
-    form.hoursCommercial > 0
-      ? form.hourlyRate * form.hoursCommercial * 4.33 * 0.2 * 12 // 20% more conversion
-      : 0
-
-  // Payment recovery from better follow-up
-  const recoveredPayments =
-    form.painPoints.includes("relances")
-      ? (revenueToNumber(form.revenue) * 0.08) // 8% of revenue typically unpaid
-      : 0
+  // 4,33 = nombre moyen de semaines par mois.
+  const monthly = (hours: number) => Math.round(hours * 4.33 * form.hourlyRate)
 
   return {
-    totalHoursLost,
-    costPerMonth: Math.round(costPerMonth),
-    totalHoursSaved: Math.round(totalHoursSaved * 10) / 10,
-    monthlySavings: Math.round(monthlySavings),
-    yearlySavings: Math.round(yearlySavings),
-    additionalRevenue: Math.round(additionalRevenue),
-    recoveredPayments: Math.round(recoveredPayments),
-    totalROI: Math.round(yearlySavings + additionalRevenue + recoveredPayments),
-    hoursSavedAdmin: Math.round(hoursSavedAdmin * 10) / 10,
-    hoursSavedCommercial: Math.round(hoursSavedCommercial * 10) / 10,
-    hoursSavedRelation: Math.round(hoursSavedRelation * 10) / 10,
-  }
-}
-
-function revenueToNumber(rev: string): number {
-  switch (rev) {
-    case "<50k": return 35000
-    case "50-150k": return 100000
-    case "150-500k": return 300000
-    case "500k+": return 600000
-    default: return 50000
+    weeklyHours: Math.round(weeklyHours * 10) / 10,
+    monthlyCost: monthly(weeklyHours),
+    yearlyCost: monthly(weeklyHours) * 12,
+    admin: { hours: form.hoursAdmin, cost: monthly(form.hoursAdmin) },
+    commercial: {
+      hours: form.hoursCommercial,
+      cost: monthly(form.hoursCommercial),
+    },
+    relation: {
+      hours: form.hoursRelationClient,
+      cost: monthly(form.hoursRelationClient),
+    },
   }
 }
 
 function recommendPack(form: FormData) {
-  const adminPains = form.painPoints.filter(
-    (p) =>
-      painPointsList.find((pp) => pp.id === p)?.category === "admin"
-  ).length
-  const commercialPains = form.painPoints.filter(
-    (p) =>
-      painPointsList.find((pp) => pp.id === p)?.category === "commercial"
-  ).length
-  const relationPains = form.painPoints.filter(
-    (p) =>
-      painPointsList.find((pp) => pp.id === p)?.category === "relation"
-  ).length
+  const countPains = (category: string) =>
+    form.painPoints.filter(
+      (p) => painPointsList.find((pp) => pp.id === p)?.category === category
+    ).length
+
+  const adminPains = countPains("admin")
+  const commercialPains = countPains("commercial")
+  const relationPains = countPains("relation")
 
   const totalHours =
     form.hoursAdmin + form.hoursCommercial + form.hoursRelationClient
 
-  // Bureau Externalisé Complet — heavy needs across all areas
+  // Bureau Externalisé Complet — besoin global
   if (
     totalHours >= 15 ||
     (adminPains >= 2 && commercialPains >= 1 && relationPains >= 1)
   ) {
     return {
+      id: "complet",
       pack: "Bureau Externalisé Complet",
       reason:
-        "Votre situation nécessite un accompagnement global. Admin, commercial et relation client : tout est pris en charge.",
+        "Ce que vous décrivez touche à la fois l'administratif, le commercial et vos clients. C'est l'ensemble qu'il faut reprendre, pas un bout.",
       icon: Building2,
       color: "accent",
       services: [
-        "Gestion administrative complète",
-        "Suivi commercial de A à Z avec IA",
-        "Relation client : accueil, SAV, fidélisation",
-        "Dashboard de pilotage personnalisé",
+        "Toute la gestion administrative prise en charge",
+        "Suivi commercial du premier contact à la facture",
+        "Relation client : accueil, réclamations, fidélisation",
+        "Un point mensuel sur vos chiffres et sur ce qui bloque",
       ],
     }
   }
 
-  // Machine Commerciale — commercial focus
+  // Suivi Commercial — les affaires en attente
   if (
     commercialPains >= 2 ||
     form.hoursCommercial >= 5 ||
-    (form.painPoints.includes("prospection") &&
-      form.painPoints.includes("crm"))
+    (form.painPoints.includes("devisEnAttente") &&
+      form.painPoints.includes("fichierClients"))
   ) {
     return {
-      pack: "Machine Commerciale",
+      id: "commercial",
+      pack: "Suivi Commercial",
       reason:
-        "Vous avez un vrai potentiel commercial à exploiter. CRM intelligent, prospection ciblée et relances automatisées pour faire rentrer du chiffre.",
+        "Vous avez du travail qui dort : des devis sans réponse et des clients qu'on ne rappelle pas. C'est le premier endroit où aller chercher du chiffre.",
       icon: TrendingUp,
       color: "primary",
       services: [
-        "CRM enrichi par IA : scoring leads",
-        "Relances intelligentes personnalisées",
-        "Prospection ciblée + scripts",
-        "Reporting mensuel auto-généré",
+        "Relance de tous vos devis en attente",
+        "Suivi régulier de vos clients existants",
+        "Préparation de vos rendez-vous",
+        "Un point mensuel écrit sur ce qui rentre",
       ],
     }
   }
 
-  // Bureau Zéro Chaos — admin/getting started
+  // Bureau Zéro Chaos — remettre de l'ordre d'abord
   return {
+    id: "zeroChaos",
     pack: "Bureau Zéro Chaos",
     reason:
-      "Commençons par poser des bases solides. Organisation, process et CRM — le socle indispensable avant de scaler.",
+      "Avant d'aller chercher de nouveaux clients, il faut remettre de l'ordre. On commence par là : vos dossiers, vos devis, vos factures.",
     icon: Sparkles,
     color: "primary",
     services: [
-      "Diagnostic express de votre maturité admin",
-      "Mise en place CRM adapté",
-      "Process standardisés devis → facture → relance",
-      "Organisation 5S de vos documents",
+      "Le point sur ce qui vous prend du temps aujourd'hui",
+      "Tenue de votre fichier clients",
+      "Une marche à suivre simple : devis, facture, relance",
+      "Rangement de vos documents et de vos dossiers",
     ],
   }
 }
@@ -279,15 +243,49 @@ function recommendPack(form: FormData) {
    Component
    ──────────────────────────────────────── */
 
+
 export function DiagnosticSection() {
   const [step, setStep] = useState(0)
   const [form, setForm] = useState<FormData>(defaultForm)
   const [submitted, setSubmitted] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [isSending, startSending] = useTransition()
 
   const totalSteps = 4
 
-  const roi = useMemo(() => calculateROI(form), [form])
+  const cost = useMemo(() => calculateCost(form), [form])
   const recommendation = useMemo(() => recommendPack(form), [form])
+
+  const canSubmit =
+    form.name.trim() !== "" && form.email.trim() !== "" && !isSending
+
+  const handleSubmit = () => {
+    if (!canSubmit) return
+    setSubmitError(null)
+
+    startSending(async () => {
+      const result = await submitLead({
+        name: form.name,
+        email: form.email,
+        sector: form.sector,
+        employees: form.employees,
+        revenue: form.revenue,
+        hoursAdmin: form.hoursAdmin,
+        hoursCommercial: form.hoursCommercial,
+        hoursRelationClient: form.hoursRelationClient,
+        hourlyRate: form.hourlyRate,
+        painPoints: form.painPoints,
+        cost,
+        recommendedPack: recommendation.id,
+      })
+
+      if (result.ok) {
+        setSubmitted(true)
+        return
+      }
+      setSubmitError(result.error)
+    })
+  }
 
   const canProceed = () => {
     switch (step) {
@@ -331,15 +329,15 @@ export function DiagnosticSection() {
             Quel est le coût caché de votre administratif ?
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            3 minutes pour découvrir combien vous perdez chaque mois — et
-            comment Laury peut transformer ce temps perdu en croissance.
+            3 minutes pour chiffrer, à partir de vos propres heures, ce que
+            l&apos;administratif vous coûte chaque mois.
           </p>
         </div>
 
         {/* Progress bar */}
         <div className="mb-10">
           <div className="flex items-center justify-between mb-2">
-            {["Votre profil", "Temps perdu", "Vos douleurs", "Vos résultats"].map(
+            {["Votre profil", "Temps perdu", "Ce qui coince", "Votre résultat"].map(
               (label, i) => (
                 <button
                   key={label}
@@ -437,7 +435,7 @@ export function DiagnosticSection() {
 
                   {/* CA */}
                   <label className="block text-sm font-medium text-foreground mb-3">
-                    Chiffre d'affaires annuel
+                    Chiffre d&apos;affaires annuel
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     {revenueRanges.map((r) => (
@@ -465,7 +463,7 @@ export function DiagnosticSection() {
               <div className="space-y-8 animate-fade-in-up">
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-1">
-                    Combien d'heures par semaine perdez-vous ?
+                    Combien d&apos;heures par semaine perdez-vous ?
                   </h3>
                   <p className="text-sm text-muted-foreground mb-6">
                     Estimez le temps passé sur des tâches qui ne sont pas votre
@@ -484,7 +482,7 @@ export function DiagnosticSection() {
                     {
                       key: "hoursCommercial" as const,
                       label: "Commercial",
-                      desc: "Prospection, suivi leads, relances clients, CRM…",
+                      desc: "Relance des devis, suivi des clients, rendez-vous…",
                       icon: TrendingUp,
                       max: 15,
                     },
@@ -582,17 +580,16 @@ export function DiagnosticSection() {
                   </div>
 
                   {/* Live cost preview */}
-                  {roi.totalHoursLost > 0 && (
+                  {cost.weeklyHours > 0 && (
                     <div className="mt-6 p-4 rounded-xl bg-accent/5 border border-accent/20">
                       <div className="flex items-center gap-2 text-accent font-semibold">
                         <AlertTriangle className="w-4 h-4" />
-                        Vous perdez environ{" "}
-                        {roi.costPerMonth.toLocaleString("fr-FR")} €/mois
+                        Ces heures vous coûtent environ{" "}
+                        {cost.monthlyCost.toLocaleString("fr-FR")} €/mois
                       </div>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Soit{" "}
-                        {(roi.costPerMonth * 12).toLocaleString("fr-FR")}{" "}
-                        €/an sur des tâches que Laury peut prendre en charge.
+                        Soit {cost.yearlyCost.toLocaleString("fr-FR")} €/an,
+                        au tarif horaire que vous venez d&apos;indiquer.
                       </p>
                     </div>
                   )}
@@ -605,10 +602,10 @@ export function DiagnosticSection() {
               <div className="space-y-6 animate-fade-in-up">
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-1">
-                    Qu'est-ce qui vous pèse le plus ?
+                    Qu&apos;est-ce qui vous pèse le plus ?
                   </h3>
                   <p className="text-sm text-muted-foreground mb-6">
-                    Sélectionnez tout ce qui vous parle — c'est ce qui nous
+                    Sélectionnez tout ce qui vous parle — c&apos;est ce qui nous
                     permettra de recommander la bonne formule.
                   </p>
 
@@ -666,115 +663,63 @@ export function DiagnosticSection() {
                 {/* ROI Summary */}
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-1">
-                    Votre diagnostic personnalisé
+                    Ce que cette charge vous coûte
                   </h3>
                   <p className="text-sm text-muted-foreground mb-6">
-                    Voici ce que Laury peut vous faire gagner, estimé sur la
-                    base de vos réponses.
+                    Calculé à partir des heures que vous avez indiquées et de
+                    votre propre tarif horaire. Rien d&apos;autre.
                   </p>
 
-                  {/* Big ROI number */}
+                  {/* Coût total */}
                   <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20 mb-6">
                     <p className="text-sm font-medium text-muted-foreground mb-1">
-                      ROI annuel estimé
+                      Temps passé hors de votre métier
                     </p>
                     <p className="text-4xl md:text-5xl font-bold text-primary">
-                      {roi.totalROI.toLocaleString("fr-FR")} €
+                      {cost.yearlyCost.toLocaleString("fr-FR")} €
                     </p>
                     <p className="text-sm text-muted-foreground mt-2">
-                      de valeur récupérée par an
+                      par an, soit {cost.weeklyHours} h par semaine
                     </p>
                   </div>
 
-                  {/* ROI Breakdown */}
+                  {/* Répartition */}
                   <div className="grid sm:grid-cols-3 gap-4 mb-6">
-                    <div className="p-4 rounded-xl bg-card border border-border text-center">
-                      <Clock className="w-6 h-6 text-primary mx-auto mb-2" />
-                      <p className="text-2xl font-bold text-foreground">
-                        {roi.totalHoursSaved}h
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        récupérées / semaine
-                      </p>
-                    </div>
-                    <div className="p-4 rounded-xl bg-card border border-border text-center">
-                      <Euro className="w-6 h-6 text-accent mx-auto mb-2" />
-                      <p className="text-2xl font-bold text-foreground">
-                        {roi.monthlySavings.toLocaleString("fr-FR")} €
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        économisés / mois
-                      </p>
-                    </div>
-                    <div className="p-4 rounded-xl bg-card border border-border text-center">
-                      <TrendingUp className="w-6 h-6 text-primary mx-auto mb-2" />
-                      <p className="text-2xl font-bold text-foreground">
-                        {(roi.additionalRevenue + roi.recoveredPayments).toLocaleString("fr-FR")} €
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        CA additionnel / an
-                      </p>
-                    </div>
+                    {[
+                      { icon: FileText, label: "Administratif", data: cost.admin },
+                      { icon: TrendingUp, label: "Commercial", data: cost.commercial },
+                      { icon: Users, label: "Relation client", data: cost.relation },
+                    ].map((row) => (
+                      <div
+                        key={row.label}
+                        className="p-4 rounded-xl bg-card border border-border text-center"
+                      >
+                        <row.icon className="w-6 h-6 text-primary mx-auto mb-2" />
+                        <p className="text-2xl font-bold text-foreground">
+                          {row.data.cost.toLocaleString("fr-FR")} €
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {row.label} — {row.data.hours} h/sem
+                        </p>
+                      </div>
+                    ))}
                   </div>
 
-                  {/* Breakdown detail */}
+                  {/* Méthode de calcul, en clair */}
                   <div className="p-4 rounded-xl bg-secondary/50 border border-border mb-6">
-                    <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <h4 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
                       <BarChart3 className="w-4 h-4 text-primary" />
-                      Détail des gains estimés
+                      Comment ce chiffre est calculé
                     </h4>
-                    <div className="space-y-2">
-                      {roi.hoursSavedAdmin > 0 && (
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-muted-foreground">
-                            ⏱ Temps admin récupéré
-                          </span>
-                          <span className="font-medium text-foreground">
-                            {roi.hoursSavedAdmin}h/sem → {Math.round(roi.hoursSavedAdmin * 4.33 * form.hourlyRate).toLocaleString("fr-FR")} €/mois
-                          </span>
-                        </div>
-                      )}
-                      {roi.hoursSavedCommercial > 0 && (
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-muted-foreground">
-                            📈 Temps commercial récupéré
-                          </span>
-                          <span className="font-medium text-foreground">
-                            {roi.hoursSavedCommercial}h/sem → {Math.round(roi.hoursSavedCommercial * 4.33 * form.hourlyRate).toLocaleString("fr-FR")} €/mois
-                          </span>
-                        </div>
-                      )}
-                      {roi.hoursSavedRelation > 0 && (
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-muted-foreground">
-                            🤝 Temps relation client récupéré
-                          </span>
-                          <span className="font-medium text-foreground">
-                            {roi.hoursSavedRelation}h/sem → {Math.round(roi.hoursSavedRelation * 4.33 * form.hourlyRate).toLocaleString("fr-FR")} €/mois
-                          </span>
-                        </div>
-                      )}
-                      {roi.additionalRevenue > 0 && (
-                        <div className="flex items-center justify-between text-sm border-t border-border pt-2">
-                          <span className="text-muted-foreground">
-                            💰 CA additionnel (meilleure conversion)
-                          </span>
-                          <span className="font-medium text-accent">
-                            +{roi.additionalRevenue.toLocaleString("fr-FR")} €/an
-                          </span>
-                        </div>
-                      )}
-                      {roi.recoveredPayments > 0 && (
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-muted-foreground">
-                            🔄 Impayés récupérés (relances structurées)
-                          </span>
-                          <span className="font-medium text-accent">
-                            +{roi.recoveredPayments.toLocaleString("fr-FR")} €/an
-                          </span>
-                        </div>
-                      )}
-                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {cost.weeklyHours} h par semaine × 4,33 semaines par mois
+                      × {form.hourlyRate} € de l&apos;heure ={" "}
+                      {cost.monthlyCost.toLocaleString("fr-FR")} € par mois.
+                      C&apos;est le temps que vous passez sur des tâches qui ne
+                      sont pas votre métier — pas une promesse d&apos;économie.
+                      Ce que Laury peut réellement vous reprendre, on en parle
+                      ensemble au téléphone.
+                    </p>
                   </div>
                 </div>
 
@@ -788,7 +733,7 @@ export function DiagnosticSection() {
                       <div className="flex items-center gap-2 mb-1">
                         <Zap className="w-4 h-4 text-accent" />
                         <span className="text-xs font-medium text-accent uppercase tracking-wide">
-                          Pack recommandé pour vous
+                          Par où commencer
                         </span>
                       </div>
                       <h4 className="text-xl font-bold text-foreground mb-2">
@@ -812,17 +757,19 @@ export function DiagnosticSection() {
                   </div>
                 </div>
 
-                {/* IA mention */}
+                {/* Une personne, pas un logiciel */}
                 <div className="flex items-start gap-3 p-4 rounded-xl bg-secondary/50 border border-border">
-                  <Bot className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                  <Users className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                   <div>
                     <p className="text-sm text-foreground font-medium">
-                      IA + humain = la méthode Laury
+                      C&apos;est Laury qui s&apos;occupe de vos dossiers
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Ces estimations sont basées sur les résultats moyens
-                      observés chez des profils similaires au vôtre. L'IA
-                      automatise le répétitif, Laury gère le relationnel.
+                      Pas un standard, pas un logiciel : une seule personne qui
+                      connaît votre activité et vos clients. La formule
+                      ci-dessus est un point de départ, pas un devis — on
+                      l&apos;ajuste ensemble à ce dont vous avez vraiment
+                      besoin.
                     </p>
                   </div>
                 </div>
@@ -834,8 +781,8 @@ export function DiagnosticSection() {
                       Recevez votre diagnostic complet
                     </h4>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Laury vous recontacte sous 24h pour un appel découverte
-                      gratuit.
+                      Laury vous rappelle pour un premier échange, sans
+                      engagement.
                     </p>
                     <div className="grid sm:grid-cols-2 gap-3 mb-4">
                       <input
@@ -866,11 +813,22 @@ export function DiagnosticSection() {
                     <Button
                       size="lg"
                       className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
-                      onClick={() => setSubmitted(true)}
+                      onClick={handleSubmit}
+                      disabled={!canSubmit}
                     >
                       <Send className="w-4 h-4 mr-2" />
-                      Recevoir mon diagnostic + réserver un appel
+                      {isSending
+                        ? "Envoi en cours…"
+                        : "Recevoir mon diagnostic + réserver un appel"}
                     </Button>
+                    {submitError && (
+                      <p
+                        role="alert"
+                        className="text-sm text-destructive text-center mt-3"
+                      >
+                        {submitError}
+                      </p>
+                    )}
                     <p className="text-xs text-muted-foreground text-center mt-3">
                       Pas de spam. Laury vous contacte personnellement.
                     </p>
@@ -884,8 +842,8 @@ export function DiagnosticSection() {
                       Merci {form.name || ""} ! 🎉
                     </h4>
                     <p className="text-sm text-muted-foreground">
-                      Votre diagnostic a été envoyé. Laury vous recontacte sous
-                      24h pour un appel découverte gratuit et personnalisé.
+                      Votre diagnostic est bien arrivé. Laury vous rappelle
+                      pour en parler de vive voix, sans engagement.
                     </p>
                   </div>
                 )}

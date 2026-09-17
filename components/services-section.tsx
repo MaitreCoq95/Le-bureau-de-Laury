@@ -31,12 +31,12 @@ export function ServicesSection() {
                 <p className="text-sm text-muted-foreground mb-4">{service.description}</p>
                 <div className="space-y-2 text-xs">
                   <div>
-                    <span className="text-primary font-medium">Livrables :</span>
+                    <span className="text-primary font-medium">Concrètement :</span>
                     <p className="text-muted-foreground">{service.deliverables}</p>
                   </div>
                   <div>
-                    <span className="text-accent font-medium">Impact :</span>
-                    <p className="text-muted-foreground">{service.metrics}</p>
+                    <span className="text-accent font-medium">Ce que ça change :</span>
+                    <p className="text-muted-foreground">{service.commitment}</p>
                   </div>
                 </div>
               </div>
